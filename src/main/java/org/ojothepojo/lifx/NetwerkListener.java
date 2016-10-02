@@ -1,5 +1,6 @@
 package org.ojothepojo.lifx;
 
+import org.ojothepojo.lifx.message.LifxMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,7 @@ public class NetwerkListener {
     public static final int BROADCAST_PORT = 56700;
 
     public void startListening() throws IOException {
-        LOGGER.debug("test logging...");
+        LOGGER.debug("Start listening...");
 
         DatagramChannel channel = DatagramChannel.open();
         channel.socket().bind(new InetSocketAddress(BROADCAST_PORT));
@@ -28,10 +29,12 @@ public class NetwerkListener {
         channel.configureBlocking(true);
 
         while (true) {
-            ByteBuffer buf = ByteBuffer.allocate(48);
+            ByteBuffer buf = ByteBuffer.allocate(512);
             buf.clear();
             SocketAddress receive = channel.receive(buf);
             LOGGER.debug("Reveived on " + receive.toString() + " " + Arrays.toString(buf.array()));
+            LifxMessage message = new LifxMessage(buf.array());
+            LOGGER.debug("");
         }
     }
 
