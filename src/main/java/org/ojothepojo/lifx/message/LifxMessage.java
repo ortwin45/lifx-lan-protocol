@@ -1,8 +1,6 @@
 package org.ojothepojo.lifx.message;
 
 
-
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class LifxMessage {
@@ -21,10 +19,29 @@ public class LifxMessage {
         if (input.length < MESSAGE_MINIMAL_LENGHT){
             throw new IllegalArgumentException("Message too short");
         }
-        frame = new LifxFrame(Arrays.copyOfRange(input, 0, 7));
-        frameAddress = new LifxFrameAddress(Arrays.copyOfRange(input, 8, 23));
-        header = new LifxHeader(Arrays.copyOfRange(input, 24, 35));
+        frame = new LifxFrame(Arrays.copyOfRange(input, 0, 8));
+        frameAddress = new LifxFrameAddress(Arrays.copyOfRange(input, 8, 24));
+        header = new LifxHeader(Arrays.copyOfRange(input, 24, 36));
+        payload = new LifxPayload(Arrays.copyOfRange(input, 36, frame.getSize()));
+    }
 
+    public LifxFrame getFrame() {
+        return frame;
+    }
+
+
+    public LifxFrameAddress getFrameAddress() {
+        return frameAddress;
+    }
+
+
+    public LifxHeader getHeader() {
+        return header;
+    }
+
+
+    public LifxPayload getPayload() {
+        return payload;
     }
 
 }
