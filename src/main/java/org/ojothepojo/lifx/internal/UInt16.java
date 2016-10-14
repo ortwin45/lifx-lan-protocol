@@ -1,7 +1,9 @@
 package org.ojothepojo.lifx.internal;
 
-/**
- * Created by ortwin on 11/10/16.
- */
+
+import java.nio.ByteBuffer;
+
 public class UInt16 {
+
+
 }

@@ -1,6 +1,8 @@
 package org.ojothepojo.lifx.message;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.ojothepojo.lifx.internal.UInt16;
 import org.ojothepojo.lifx.internal.UInt32;
 import org.ojothepojo.lifx.internal.UInt64;
@@ -12,10 +14,13 @@ abstract class Message {
     private static final int HEADER_LENGTH = 64 + 128 + 96;
 
     // Frame fields
+    @Getter
     private UInt16 size;
-    private UInt8 origin;
+    @Getter
+    private byte origin = 0;
     private boolean tagged;
-    private boolean addressable;
+    @Getter
+    private boolean addressable = true;
     private UInt16 protocol;
     private UInt32 source;
 
@@ -41,7 +46,7 @@ abstract class Message {
     protected ByteBuffer getHeaderBytes() {
         ByteBuffer bytes = ByteBuffer.allocate(HEADER_LENGTH);
 
-        // TODO...
+
         return bytes;
     }
 
