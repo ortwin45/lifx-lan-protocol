@@ -1,53 +1,102 @@
 package org.ojothepojo.lifx.message;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.ojothepojo.lifx.internal.UInt16;
-import org.ojothepojo.lifx.internal.UInt32;
-import org.ojothepojo.lifx.internal.UInt64;
-import org.ojothepojo.lifx.internal.UInt8;
-
 import java.nio.ByteBuffer;
 
-abstract class Message {
-    private static final int HEADER_LENGTH = 64 + 128 + 96;
+public abstract class Message {
+    protected static final int HEADER_LENGTH = 8 + 16 + 12; // 36 bytes header
 
-    // Frame fields
-    @Getter
-    private UInt16 size;
-    @Getter
-    private byte origin = 0;
+    // FRAME
+    private int size;
     private boolean tagged;
-    @Getter
-    private boolean addressable = true;
-    private UInt16 protocol;
-    private UInt32 source;
+    private long source;
 
-    // Frame Address fields
-    private UInt64 target;
-    private byte[] reserved1;
-    private byte reserved2;
+    // FRAME ADDRESS
+    private long target;
     private boolean ackRequired;
     private boolean resRequired;
-    private UInt8 sequence;
+    private short sequence;
 
-    // Protocol Header fields
-    private UInt64 reserved3;
-    private UInt16 type;
-    private byte[] reserved4;
+    // PROTOCOL HEADER
+    private int type;
 
-    protected abstract int getPayloadLength();
-
-    protected int getLength() {
-        return getPayloadLength() + HEADER_LENGTH;
+    public void setSize(int value){
+        checkUnsigned16bit(value);
+        size = value;
     }
 
-    protected ByteBuffer getHeaderBytes() {
-        ByteBuffer bytes = ByteBuffer.allocate(HEADER_LENGTH);
-
-
-        return bytes;
+    public short getSize() {
+        return (short) (size & 0xFFFF);
     }
 
+    public void setTagged(boolean value) {
+        tagged = value;
+    }
+
+    public short getTagged() {
+        if (tagged) {
+            return (short) 0x3400;
+        } else {
+            return (short) 0x1400;
+        }
+    }
+
+    public void setSource(long value){
+        checkUnsigned32bit(value);
+        source = value;
+    }
+
+    public int getSource() {
+        return (int) (source & 0xFFFFFFFF);
+    }
+
+    public long getTarget() {
+        return target;
+    }
+
+    public byte getAckResRequired() {
+        int result = 0;
+        if (ackRequired) {
+            result = result + 2;
+        }
+        if (resRequired) {
+            result = result + 1;
+        }
+        return (byte)result;
+    }
+
+    public void setSequence(short value) {
+        checkUnsigned8bit(value);
+        sequence = value;
+    }
+
+    public byte getSequence() {
+        return (byte) (sequence & 0xFF);
+    }
+
+    public void setType(int value) {
+        checkUnsigned16bit(value);
+        type = value;
+    }
+
+    public short getType() {
+        return (short) (type & 0xFFFF);
+    }
+
+    private void checkUnsigned8bit(int value) {
+        if (value < 0 || value > 255) {
+            throw new IllegalArgumentException("Value must be an unsigned 8-bit integer");
+        }
+    }
+
+    private void checkUnsigned16bit(int value) {
+        if (value < 0 || value > 65535) {
+            throw new IllegalArgumentException("Value must be an unsigned 16-bit integer");
+        }
+    }
+
+    private void checkUnsigned32bit(long value) {
+        if (value < 0 || value > 4294967295L) {
+            throw new IllegalArgumentException("Value must be an unsigned 32-bit integer");
+        }
+    }
 }

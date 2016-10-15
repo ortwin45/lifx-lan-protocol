@@ -7,13 +7,9 @@ import java.nio.ByteBuffer;
 
 public class StateService extends ResponseMessage {
 
-    @Override
-    protected int getPayloadLength() {
-        return 0;
-    }
 
     @Override
     public void parsePayload(ByteBuffer bytes) {
-        //TODO
+
     }
 }

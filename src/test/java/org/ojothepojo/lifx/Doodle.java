@@ -11,6 +11,33 @@ public class Doodle {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Doodle.class);
 
+
+    @Test
+    public void testme2 () {
+        int i = 0x0011FFFF;
+        short s = (short)(i & 0xFFFF);
+        LOGGER.debug("" + s);
+    }
+
+    @Test
+    public void testme() {
+        int i = 5000;
+
+        ByteBuffer x = ByteBuffer
+                .allocate(2)
+                .putShort((short) (i & 0xFFFF));
+                //.putShort((short) (i));
+
+        x.rewind();
+        byte b = x.get();
+        LOGGER.debug(String.format("%02X ", b));
+
+        b = x.get();
+        LOGGER.debug(String.format("%02X ", b));
+
+
+    }
+
     @Test
     public void byteStuff() {
         byte b1 = 127;
