@@ -4,8 +4,6 @@ import org.junit.Test;
 
 import java.nio.ByteBuffer;
 
-import static org.junit.Assert.*;
-
 public class RequestMessageTest {
 
     @Test
@@ -14,7 +12,7 @@ public class RequestMessageTest {
         message.setSize(Message.HEADER_LENGTH);
         message.setTagged(true);
         message.setType(2);
-        ByteBuffer byteBuffer = message.headerBytes();
+        ByteBuffer byteBuffer = message.headerToBytes();
     }
 
 
@@ -22,7 +20,7 @@ public class RequestMessageTest {
 
     class TestMessage extends RequestMessage {
         @Override
-        public ByteBuffer payloadBytes() {
+        public ByteBuffer payloadToBytes() {
             return null;
         }
     }

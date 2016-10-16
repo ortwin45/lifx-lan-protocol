@@ -10,10 +10,11 @@ public class GetService extends RequestMessage {
     public GetService() {
         setTagged(true);
         setType(02);
+        setSource(3794720773L);
     }
 
     @Override
-    public ByteBuffer payloadBytes() {
+    public ByteBuffer payloadToBytes() {
         return null;
     }
 }

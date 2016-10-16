@@ -1,23 +1,57 @@
 package org.ojothepojo.lifx.message;
 
-import java.nio.ByteBuffer;
+import lombok.ToString;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+@ToString
 public abstract class Message {
     protected static final int HEADER_LENGTH = 8 + 16 + 12; // 36 bytes header
 
     // FRAME
     private int size;
     private boolean tagged;
-    private long source;
+    private long source; // This is the multicast group
 
     // FRAME ADDRESS
-    private long target;
+    private long target; // This is a MAC address
     private boolean ackRequired;
     private boolean resRequired;
     private short sequence;
 
     // PROTOCOL HEADER
     private int type;
+
+    //2900 0054 0000 0000 D073 D513 0F6E 0000 4C49 4658 5632 0000 3CB3 C542 2D16 7E14 0300 0000    017C DD00 00
+    //0000 0034 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0200 0000    0000
+    public void parseHeader(ByteBuffer buffer) {
+        buffer.rewind();
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        this.setSize(buffer.getShort() & 0xffff);
+        buffer.position(32);
+        this.setType(buffer.getShort() & 0xffff);
+    }
+
+    public ByteBuffer headerToBytes() {
+        return ByteBuffer
+                .allocate(HEADER_LENGTH)
+                .order(ByteOrder.LITTLE_ENDIAN)
+                .putShort(getSize())
+                .putShort(getTagged())
+                .putInt(getSource())
+                .putLong(getTarget())
+                .putInt(0).putShort((short)0) // 6 bytes reserved
+                .put(getAckResRequired())
+                .put(getSequence())
+                .putLong(0L) // 8 bytes reserved
+                .putShort(getType())
+                .putShort((short)0);
+    }
+
+    public abstract ByteBuffer payloadToBytes();
+
+    // GETTERS AND SETTERS
 
     public void setSize(int value){
         checkUnsigned16bit(value);
@@ -81,6 +115,8 @@ public abstract class Message {
     public short getType() {
         return (short) (type & 0xFFFF);
     }
+
+    // PRIVATE METHODS
 
     private void checkUnsigned8bit(int value) {
         if (value < 0 || value > 255) {
