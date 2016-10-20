@@ -3,7 +3,6 @@ package org.ojothepojo.lifx.message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.DatatypeConverter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -25,7 +24,6 @@ public abstract class RequestMessage extends Message {
                 .putShort(getType())
                 .putShort((short)0) // 2 bytes reserved
                 ;
-
 
         return result;
     }

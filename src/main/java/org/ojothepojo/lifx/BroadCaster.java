@@ -21,21 +21,21 @@ public class BroadCaster {
     public static final InetSocketAddress BROADCAST_ADDRESS = new InetSocketAddress(BROADCAST_PORT);
 
 
-    public void doBroadcast() throws IOException {
+    public void doBroadcast() throws IOException, InterruptedException {
         GetService getService = new GetService();
 
-        DatagramSocket socket = new DatagramSocket(56700);
-        InetAddress address = InetAddress.getByName("192.168.1.255");
+            DatagramSocket socket = new DatagramSocket(56700);
+            InetAddress address = InetAddress.getByName("192.168.1.255");
         socket.setBroadcast(true);
 
         DatagramPacket sendPacket = new DatagramPacket(getService.headerToBytes().array(),
                 getService.headerToBytes().array().length, address, 56700);
         socket.send(sendPacket);
-
+        socket.setBroadcast(false);
         ByteBuffer buf = ByteBuffer.allocate(512);
 
-
-        while (true) {
+        int i  = 2;
+        while (i > 0) {
             DatagramPacket receivePacket = new DatagramPacket(buf.array(), 512);
             socket.receive(receivePacket);
             LOGGER.debug(receivePacket.getAddress() +  " " + DatatypeConverter.printHexBinary(buf.array()));
@@ -43,6 +43,9 @@ public class BroadCaster {
             message.parseHeader(buf);
             LOGGER.debug(message.toString());
             LOGGER.debug("");
+            Thread.sleep(100);
+            i--;
         }
+
     }
 }
