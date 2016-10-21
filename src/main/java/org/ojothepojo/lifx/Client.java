@@ -2,8 +2,7 @@ package org.ojothepojo.lifx;
 
 import com.google.common.eventbus.EventBus;
 import org.ojothepojo.lifx.event.PacketListenerThread;
-import org.ojothepojo.lifx.event.DeadEventHandler;
-import org.ojothepojo.lifx.message.Message;
+import org.ojothepojo.lifx.event.LoggingEventHandler;
 import org.ojothepojo.lifx.message.RequestMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +24,7 @@ public class Client {
 
     public Client() throws SocketException {
         this.eventBus = new EventBus();
-        eventBus.register(new DeadEventHandler());
+        eventBus.register(new LoggingEventHandler());
         this.socket = new DatagramSocket(BROADCAST_PORT);
         //this.socket.setBroadcast(true); // Is this needed?
     }

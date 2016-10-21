@@ -28,11 +28,12 @@ public class PacketListenerThread implements Runnable {
     public void run() {
         try {
             while (true) {
-                byte[] buf = new byte[512];
+                byte[] buf = new byte[128];
                 DatagramPacket receivePacket = new DatagramPacket(buf, buf.length);
                 socket.receive(receivePacket);
                 LOGGER.debug(receivePacket.getAddress() +  " " + DatatypeConverter.printHexBinary(buf));
-                Message message = new StateService();
+                Message message = ResponseMessageFactory.toMessage(buf);
+                //Message message = new StateService();
                 eventBus.post(new MessageReceivedEvent(message));
             }
         } catch (IOException e) {

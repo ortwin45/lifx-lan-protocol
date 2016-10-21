@@ -2,9 +2,6 @@ package org.ojothepojo.lifx.message;
 
 import lombok.ToString;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 @ToString
 public abstract class Message {
     protected static final int HEADER_LENGTH = 8 + 16 + 12; // 36 bytes header
@@ -23,15 +20,6 @@ public abstract class Message {
     // PROTOCOL HEADER
     private int type;
 
-    //2900 0054 0000 0000 D073 D513 0F6E 0000 4C49 4658 5632 0000 3CB3 C542 2D16 7E14 0300 0000    017C DD00 00
-    //0000 0034 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0200 0000    0000
-    public void parseHeader(ByteBuffer buffer) {
-        buffer.rewind();
-        buffer.order(ByteOrder.LITTLE_ENDIAN);
-        this.setSize(buffer.getShort() & 0xffff);
-        buffer.position(32);
-        this.setType(buffer.getShort() & 0xffff);
-    }
 
     // GETTERS AND SETTERS
 

@@ -39,8 +39,8 @@ public class BroadCaster {
             DatagramPacket receivePacket = new DatagramPacket(buf.array(), 512);
             socket.receive(receivePacket);
             LOGGER.debug(receivePacket.getAddress() +  " " + DatatypeConverter.printHexBinary(buf.array()));
-            Message message = new StateService();
-            message.parseHeader(buf);
+            Message message = new StateService(buf.array());
+            //message.parseHeader(buf);
             LOGGER.debug(message.toString());
             LOGGER.debug("");
             Thread.sleep(100);
