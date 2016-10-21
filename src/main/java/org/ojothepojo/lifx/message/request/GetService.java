@@ -15,6 +15,6 @@ public class GetService extends RequestMessage {
 
     @Override
     public ByteBuffer payloadToBytes() {
-        return null;
+        return ByteBuffer.allocate(0);
     }
 }

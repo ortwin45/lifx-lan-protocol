@@ -28,8 +28,8 @@ public class BroadCaster {
             InetAddress address = InetAddress.getByName("192.168.1.255");
         socket.setBroadcast(true);
 
-        DatagramPacket sendPacket = new DatagramPacket(getService.headerToBytes().array(),
-                getService.headerToBytes().array().length, address, 56700);
+        DatagramPacket sendPacket = new DatagramPacket(getService.toBytes().array(),
+                getService.toBytes().array().length, address, 56700);
         socket.send(sendPacket);
         socket.setBroadcast(false);
         ByteBuffer buf = ByteBuffer.allocate(512);

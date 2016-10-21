@@ -1,9 +1,10 @@
 package org.ojothepojo.lifx;
 
 import com.google.common.eventbus.EventBus;
-import org.ojothepojo.lifx.event.PacketListener;
-import org.ojothepojo.lifx.event.DeadEventListener;
+import org.ojothepojo.lifx.event.PacketListenerThread;
+import org.ojothepojo.lifx.event.DeadEventHandler;
 import org.ojothepojo.lifx.message.Message;
+import org.ojothepojo.lifx.message.RequestMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,25 +25,26 @@ public class Client {
 
     public Client() throws SocketException {
         this.eventBus = new EventBus();
-        eventBus.register(new DeadEventListener());
+        eventBus.register(new DeadEventHandler());
         this.socket = new DatagramSocket(BROADCAST_PORT);
-        this.socket.setBroadcast(true);
-
+        //this.socket.setBroadcast(true); // Is this needed?
     }
 
-    public void startListenerThread() {
-        Thread listenerThread = new Thread(new PacketListener(eventBus, socket));
-
+    public void startListenerThread() throws InterruptedException {
+        Thread listenerThread = new Thread(new PacketListenerThread(eventBus, socket));
         listenerThread.start();
+        Thread.sleep(100);
     }
 
-    public void sendMessage(Message message) throws IOException {
+    public void sendMessage(RequestMessage message) throws IOException {
         LOGGER.debug("Sending message: " + message.toString());
         InetAddress address = InetAddress.getByName("192.168.1.255");
 
-        DatagramPacket sendPacket = new DatagramPacket(message.headerToBytes().array(),
-                message.headerToBytes().array().length, address, BROADCAST_PORT);
+        DatagramPacket sendPacket = new DatagramPacket(
+                message.toBytes().array(),
+                message.toBytes().array().length,
+                address,
+                BROADCAST_PORT);
         socket.send(sendPacket);
-
     }
 }

@@ -12,10 +12,8 @@ public class RequestMessageTest {
         message.setSize(Message.HEADER_LENGTH);
         message.setTagged(true);
         message.setType(2);
-        ByteBuffer byteBuffer = message.headerToBytes();
+        ByteBuffer byteBuffer = message.toBytes();
     }
-
-
 
 
     class TestMessage extends RequestMessage {

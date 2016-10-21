@@ -9,7 +9,18 @@ import java.nio.ByteOrder;
 public abstract class RequestMessage extends Message {
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestMessage.class);
 
-    public ByteBuffer headerToBytes() {
+    public ByteBuffer toBytes() {
+        ByteBuffer header = headerToBytes();
+        header.rewind();
+        ByteBuffer payload = payloadToBytes();
+        payload.rewind();
+        ByteBuffer result = ByteBuffer.allocate(header.capacity() + payload.capacity())
+                .put(header)
+                .put(payload);
+        return result;
+    }
+
+    private ByteBuffer headerToBytes() {
         ByteBuffer result = ByteBuffer
                 .allocate(HEADER_LENGTH)
                 .order(ByteOrder.LITTLE_ENDIAN)
@@ -28,6 +39,8 @@ public abstract class RequestMessage extends Message {
         return result;
     }
 
-    public abstract ByteBuffer payloadToBytes();
+
+    protected abstract ByteBuffer payloadToBytes();
+
 
 }

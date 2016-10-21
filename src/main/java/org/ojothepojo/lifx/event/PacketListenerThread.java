@@ -11,14 +11,14 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-public class PacketListener implements Runnable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PacketListener.class);
+public class PacketListenerThread implements Runnable {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PacketListenerThread.class);
 
     private EventBus eventBus;
 
     private DatagramSocket socket;
 
-    public PacketListener(EventBus eventBus, DatagramSocket socket) {
+    public PacketListenerThread(EventBus eventBus, DatagramSocket socket) {
         this.eventBus = eventBus;
         this.socket = socket;
 

@@ -13,7 +13,6 @@ public class ClientTest {
         Client client = new Client();
 
         client.startListenerThread();
-        Thread.sleep(2000);
         client.sendMessage(new GetService());
 
         Thread.sleep(2000);

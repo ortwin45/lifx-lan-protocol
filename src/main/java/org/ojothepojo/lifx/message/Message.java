@@ -33,24 +33,6 @@ public abstract class Message {
         this.setType(buffer.getShort() & 0xffff);
     }
 
-    public ByteBuffer headerToBytes() {
-        return ByteBuffer
-                .allocate(HEADER_LENGTH)
-                .order(ByteOrder.LITTLE_ENDIAN)
-                .putShort(getSize())
-                .putShort(getTagged())
-                .putInt(getSource())
-                .putLong(getTarget())
-                .putInt(0).putShort((short)0) // 6 bytes reserved
-                .put(getAckResRequired())
-                .put(getSequence())
-                .putLong(0L) // 8 bytes reserved
-                .putShort(getType())
-                .putShort((short)0);
-    }
-
-    public abstract ByteBuffer payloadToBytes();
-
     // GETTERS AND SETTERS
 
     public void setSize(int value){
