@@ -8,7 +8,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-@ToString
 public class StateService extends ResponseMessage {
 
     @Getter
@@ -25,7 +24,12 @@ public class StateService extends ResponseMessage {
     public void parsePayload(ByteBuffer buf) {
         buf.rewind();
         buf = buf.order(ByteOrder.LITTLE_ENDIAN);
-        service = (short)(buf.get() & 0xff);
-        port = (long)(buf.getInt() & 0xffffffff);
+        service = (short) (buf.get() & 0xff);
+        port = (long) (buf.getInt() & 0xffffffff);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "(service=" + service + ", port=" + port +")";
     }
 }

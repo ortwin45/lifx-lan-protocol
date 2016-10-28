@@ -27,7 +27,7 @@ public abstract class RequestMessage extends Message {
                 .putShort(getSize())
                 .putShort(getTagged())
                 .putInt(getSource())
-                .putLong(getTarget())
+                .put(getTarget()).put((byte)0).put((byte)0)
                 .putInt(0).putShort((short)0) // 6 bytes reserved
                 .put(getAckResRequired())
                 .put(getSequence())

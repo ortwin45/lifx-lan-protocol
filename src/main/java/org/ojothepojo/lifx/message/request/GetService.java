@@ -10,7 +10,8 @@ public class GetService extends RequestMessage {
     public GetService() {
         setTagged(true);
         setType(02);
-        setSource(3794720773L);
+        setSource("192.168.1.255");
+        setTarget("0:0:0:0:0:0");
     }
 
     @Override

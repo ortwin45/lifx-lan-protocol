@@ -3,6 +3,7 @@ package org.ojothepojo.lifx.event;
 
 import com.google.common.eventbus.DeadEvent;
 import com.google.common.eventbus.Subscribe;
+import org.ojothepojo.lifx.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,7 @@ public class LoggingEventHandler {
     @Subscribe
     public void handleEvent(MessageReceivedEvent event) {
         if (event.getMessage() != null) {
+
             LOGGER.info(event.getMessage().toString());
         }
     }
