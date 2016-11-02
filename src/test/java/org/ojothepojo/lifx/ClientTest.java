@@ -2,6 +2,7 @@ package org.ojothepojo.lifx;
 
 import org.junit.Test;
 import org.ojothepojo.lifx.message.request.GetService;
+import org.ojothepojo.lifx.message.request.SetPower;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,10 +20,16 @@ public class ClientTest {
 
         Thread.sleep(1000);
 
-        client.sendMessage(new GetService());
+        client.sendMessage(getService);
         Thread.sleep(500);
 
+        SetPower setPower = new SetPower();
+        setPower.setLevel(false);
+        client.sendMessage(setPower);
+
+        Thread.sleep(500);
         LOGGER.debug("STOPPING");
+
     }
 
 }

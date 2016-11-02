@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 
 public abstract class Message {
     protected static final int HEADER_LENGTH = 8 + 16 + 12; // 36 bytes header
@@ -22,6 +23,13 @@ public abstract class Message {
     // PROTOCOL HEADER
     private int type;
 
+    public Message() {
+    }
+
+    public Message(byte[] bytes) {
+        parseHeader(ByteBuffer.wrap(Arrays.copyOfRange(bytes, 0, 36)));
+        parsePayload(ByteBuffer.wrap(Arrays.copyOfRange(bytes, 36, bytes.length)));
+    }
 
     // GETTERS AND SETTERS
 
@@ -181,7 +189,7 @@ public abstract class Message {
 
     @Override
     public String toString() {
-        return "Message(size=" + getSize() + ", source="+ getSourceAsString() + ", target="+ getTargetAsString() + ", type="+ getType() +")";
+        return "--header(size=" + getSize() + ", source="+ getSourceAsString() + ", target="+ getTargetAsString() + ", type="+ getType() +")";
     }
 
     // PRIVATE METHODS

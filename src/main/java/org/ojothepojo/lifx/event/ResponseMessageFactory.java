@@ -2,6 +2,7 @@ package org.ojothepojo.lifx.event;
 
 import org.ojothepojo.lifx.message.Message;
 import org.ojothepojo.lifx.message.request.GetService;
+import org.ojothepojo.lifx.message.request.SetPower;
 import org.ojothepojo.lifx.message.response.StateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,9 @@ public class ResponseMessageFactory {
                 break;
             case 3:
                 message = new StateService(bytes);
+                break;
+            case 21:
+                message = new SetPower(bytes);
                 break;
 
             default:

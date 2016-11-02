@@ -4,7 +4,6 @@ package org.ojothepojo.lifx.message.request;
 import org.ojothepojo.lifx.message.Message;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public class GetService extends Message {
 
@@ -16,8 +15,7 @@ public class GetService extends Message {
     }
 
     public GetService(byte[] bytes) {
-        parseHeader(ByteBuffer.wrap(Arrays.copyOfRange(bytes, 0, 36)));
-        parsePayload(ByteBuffer.wrap(Arrays.copyOfRange(bytes, 36, bytes.length)));
+        super(bytes);
     }
 
     @Override
@@ -28,5 +26,10 @@ public class GetService extends Message {
     @Override
     public void parsePayload(ByteBuffer bytes) {
         // No payload for this message
+    }
+
+    @Override
+    public String toString() {
+        return "GetService" + super.toString()+ "--payload()";
     }
 }

@@ -1,12 +1,10 @@
 package org.ojothepojo.lifx.message.response;
 
 import lombok.Getter;
-import lombok.ToString;
 import org.ojothepojo.lifx.message.Message;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Arrays;
 
 public class StateService extends Message {
 
@@ -17,8 +15,7 @@ public class StateService extends Message {
     private long port;
 
     public StateService(byte[] bytes) {
-        parseHeader(ByteBuffer.wrap(Arrays.copyOfRange(bytes, 0, 36)));
-        parsePayload(ByteBuffer.wrap(Arrays.copyOfRange(bytes, 36, bytes.length)));
+        super(bytes);
     }
 
     @Override
@@ -30,12 +27,12 @@ public class StateService extends Message {
     }
 
     @Override
-    public String toString() {
-        return super.toString() + "(service=" + service + ", port=" + port +")";
+    protected ByteBuffer payloadToBytes() {
+        throw new RuntimeException("Shouldn't serialize a response message");
     }
 
     @Override
-    protected ByteBuffer payloadToBytes() {
-        throw new RuntimeException("Shouldn't serialize a response message");
+    public String toString() {
+        return "StateService" + super.toString() + "--payload(service=" + service + ", port=" + port +")";
     }
 }

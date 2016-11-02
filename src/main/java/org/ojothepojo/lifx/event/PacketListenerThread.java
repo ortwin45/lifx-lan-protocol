@@ -2,7 +2,6 @@ package org.ojothepojo.lifx.event;
 
 import com.google.common.eventbus.EventBus;
 import org.ojothepojo.lifx.message.Message;
-import org.ojothepojo.lifx.message.response.StateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
