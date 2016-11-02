@@ -111,7 +111,7 @@ public abstract class Message {
         return (byte) (sequence & 0xFF);
     }
 
-    public void setType(int value) {
+    protected void setType(int value) {
         checkUnsigned16bit(value);
         type = value;
     }

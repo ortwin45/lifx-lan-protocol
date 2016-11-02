@@ -13,12 +13,14 @@ public class ClientTest {
         Client client = new Client();
 
         client.startListenerThread();
-        client.sendMessage(new GetService());
+        GetService getService = new GetService();
 
-        Thread.sleep(2000);
+        client.sendMessage(getService);
 
-        client.sendMessage(new GetService());
         Thread.sleep(1000);
+
+        client.sendMessage(new GetService());
+        Thread.sleep(200);
 
         LOGGER.debug("STOPPING");
     }
