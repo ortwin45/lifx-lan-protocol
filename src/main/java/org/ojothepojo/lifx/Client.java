@@ -3,7 +3,7 @@ package org.ojothepojo.lifx;
 import com.google.common.eventbus.EventBus;
 import org.ojothepojo.lifx.event.PacketListenerThread;
 import org.ojothepojo.lifx.event.LoggingEventHandler;
-import org.ojothepojo.lifx.message.RequestMessage;
+import org.ojothepojo.lifx.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ public class Client {
         Thread.sleep(100);
     }
 
-    public void sendMessage(RequestMessage message) throws IOException {
+    public void sendMessage(Message message) throws IOException {
         LOGGER.debug("Sending message: " + message.toString());
         InetAddress address = InetAddress.getByName("192.168.1.255");
 

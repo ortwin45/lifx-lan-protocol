@@ -2,16 +2,17 @@ package org.ojothepojo.lifx.message.response;
 
 import lombok.Getter;
 import lombok.ToString;
-import org.ojothepojo.lifx.message.ResponseMessage;
+import org.ojothepojo.lifx.message.Message;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-public class StateService extends ResponseMessage {
+public class StateService extends Message {
 
     @Getter
     private short service;
+
     @Getter
     private long port;
 
@@ -31,5 +32,10 @@ public class StateService extends ResponseMessage {
     @Override
     public String toString() {
         return super.toString() + "(service=" + service + ", port=" + port +")";
+    }
+
+    @Override
+    protected ByteBuffer payloadToBytes() {
+        throw new RuntimeException("Shouldn't serialize a response message");
     }
 }

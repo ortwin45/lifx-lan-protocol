@@ -2,6 +2,9 @@ package org.ojothepojo.lifx.message;
 
 import com.google.common.base.Strings;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 public abstract class Message {
     protected static final int HEADER_LENGTH = 8 + 16 + 12; // 36 bytes header
 
@@ -117,6 +120,65 @@ public abstract class Message {
         return (short) (type & 0xFFFF);
     }
 
+
+    // Serializing
+
+    public ByteBuffer toBytes() {
+        ByteBuffer header = headerToBytes();
+        header.rewind();
+        ByteBuffer payload = payloadToBytes();
+        payload.rewind();
+        return ByteBuffer.allocate(header.capacity() + payload.capacity())
+                .put(header)
+                .put(payload);
+    }
+
+    private ByteBuffer headerToBytes() {
+        return ByteBuffer
+                .allocate(HEADER_LENGTH)
+                .order(ByteOrder.LITTLE_ENDIAN)
+                .putShort(getSize())
+                .putShort(getTagged())
+                .putInt(getSource())
+                .put(getTarget()).put((byte)0).put((byte)0)
+                .putInt(0).putShort((short)0) // 6 bytes reserved
+                .put(getAckResRequired())
+                .put(getSequence())
+                .putLong(0L) // 8 bytes reserved
+                .putShort(getType())
+                .putShort((short)0);
+    }
+
+
+    protected abstract ByteBuffer payloadToBytes();
+
+
+
+    // Deserializing
+
+    //2900 0054 05D8 2EE2 D073 D513 0F6E 0000 4C49 4658 5632 0000 3CB3 C542 2D16 7E14 0300 0000    017C DD00 00
+    //0000 0034 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0200 0000    0000
+    protected void parseHeader(ByteBuffer buffer) {
+        buffer.rewind();
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        this.setSize(buffer.getShort() & 0xffff);
+        buffer.position(4);
+        this.setSource(buffer.getInt() & 0xffffffff);
+
+        byte[] target = new byte[6];
+        for (int i = 0; i < target.length; i++ ) {
+            target[i] = buffer.get();
+        }
+        this.setTarget(target);
+
+        buffer.position(32);
+        this.setType(buffer.getShort() & 0xffff);
+    }
+
+    public abstract void parsePayload(ByteBuffer bytes);
+
+
+
     @Override
     public String toString() {
         return "Message(size=" + getSize() + ", source="+ getSourceAsString() + ", target="+ getTargetAsString() + ", type="+ getType() +")";
@@ -142,7 +204,7 @@ public abstract class Message {
         }
     }
 
-    public long ipToLong(String ipAddress) {
+    private long ipToLong(String ipAddress) {
         long result = 0;
         String[] ipAddressInArray = ipAddress.split("\\.");
         for (int i = 3; i >= 0; i--) {
@@ -157,7 +219,7 @@ public abstract class Message {
         return result;
     }
 
-    public String longToIp(long ip) {
+    private String longToIp(long ip) {
         return ((ip >> 24) & 0xFF) + "."
                 + ((ip >> 16) & 0xFF) + "."
                 + ((ip >> 8) & 0xFF) + "."

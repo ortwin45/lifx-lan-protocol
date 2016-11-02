@@ -2,6 +2,8 @@ package org.ojothepojo.lifx.message;
 
 import org.junit.Test;
 
+import java.nio.ByteBuffer;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
@@ -26,5 +28,14 @@ public class MessageTest {
 
     private class TestMessage extends Message {
 
+        @Override
+        protected ByteBuffer payloadToBytes() {
+            return null;
+        }
+
+        @Override
+        public void parsePayload(ByteBuffer bytes) {
+
+        }
     }
 }

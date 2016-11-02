@@ -8,7 +8,7 @@ public class RequestMessageTest {
 
     @Test
     public void headerBytes() throws Exception {
-        RequestMessage message = new TestMessage();
+        Message message = new TestMessage();
         message.setSize(Message.HEADER_LENGTH);
         message.setTagged(true);
         message.setType(2);
@@ -16,10 +16,15 @@ public class RequestMessageTest {
     }
 
 
-    class TestMessage extends RequestMessage {
+    class TestMessage extends Message {
         @Override
         public ByteBuffer payloadToBytes() {
             return null;
+        }
+
+        @Override
+        public void parsePayload(ByteBuffer bytes) {
+            // Do nothing
         }
     }
 }
