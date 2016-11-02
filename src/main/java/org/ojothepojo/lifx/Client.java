@@ -17,7 +17,6 @@ public class Client {
     private static Logger LOGGER = LoggerFactory.getLogger(Client.class);
     public static final int BROADCAST_PORT = 56700;
 
-
     private EventBus eventBus;
 
     private DatagramSocket socket;

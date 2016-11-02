@@ -10,6 +10,12 @@ import static org.assertj.core.api.Assertions.*;
 public class MessageTest {
 
     @Test
+    public void doodle() {
+        short b = Short.parseShort("FF", 16);
+        assertThat(b).isEqualTo((short)255);
+    }
+
+    @Test
     public void testIp() {
         Message message = new TestMessage();
         String ip = "192.168.1.255";
@@ -20,7 +26,7 @@ public class MessageTest {
     @Test
     public void testTarget() {
         Message message = new TestMessage();
-        String macAddress = "D0:73:D5:13:00:9B";
+        String macAddress = "D0:FF:D5:13:00:9B";
         message.setTarget(macAddress);
         assertThat(message.getTargetAsString()).isEqualTo(macAddress);
     }

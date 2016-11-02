@@ -20,7 +20,7 @@ public class ClientTest {
         Thread.sleep(1000);
 
         client.sendMessage(new GetService());
-        Thread.sleep(200);
+        Thread.sleep(500);
 
         LOGGER.debug("STOPPING");
     }

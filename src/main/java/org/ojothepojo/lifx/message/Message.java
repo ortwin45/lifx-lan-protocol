@@ -14,7 +14,7 @@ public abstract class Message {
     private long source; // This is the multicast group
 
     // FRAME ADDRESS
-    private byte[] target; // This is a MAC address
+    private short[] target; // This is a MAC address
     private boolean ackRequired;
     private boolean resRequired;
     private short sequence;
@@ -63,15 +63,15 @@ public abstract class Message {
     }
 
     public void setTarget(String macAddress) {
-        target = new byte[6];
+        target = new short[6];
         String[] split = macAddress.split(":");
         for (int i = 0; i < split.length; i++) {
-            target[i] = Byte.parseByte(split[i], 16);
+            target[i] = Short.parseShort(split[i], 16);
         }
     }
 
-    protected void setTarget(byte[] bytes) {
-        target = bytes;
+    protected void setTarget(short[] shorts) {
+        target = shorts;
     }
 
     public byte[] getTarget() {
@@ -84,7 +84,7 @@ public abstract class Message {
 
     public String getTargetAsString(){
         String macAddress= "";
-        for (byte s : target) {
+        for (short s : target) {
             macAddress = macAddress + Strings.padStart(Integer.toHexString(s & 0xff).toUpperCase(), 2, '0') + ":";
         }
         return macAddress.substring(0, macAddress.length() - 1);
@@ -165,7 +165,7 @@ public abstract class Message {
         buffer.position(4);
         this.setSource(buffer.getInt() & 0xffffffff);
 
-        byte[] target = new byte[6];
+        short[] target = new short[6];
         for (int i = 0; i < target.length; i++ ) {
             target[i] = buffer.get();
         }
