@@ -1,17 +1,16 @@
 package org.ojothepojo.lifx;
 
 import org.junit.Test;
-import org.ojothepojo.lifx.message.device.request.GetPower;
-import org.ojothepojo.lifx.message.device.request.GetService;
-import org.ojothepojo.lifx.message.device.request.SetPower;
+import org.ojothepojo.lifx.message.light.request.GetColor;
+import org.ojothepojo.lifx.message.light.request.SetColor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class ClientTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientTest.class);
+public class ClientColorTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientColorTest.class);
 
     @Test
     public void start() throws Exception {
@@ -19,24 +18,18 @@ public class ClientTest {
         String ipAddress = getIpAddress();
 
         client.startListenerThread();
-        GetService getService = new GetService();
-        client.sendMessage(getService);
-        LOGGER.debug("");
-        Thread.sleep(500);
-        LOGGER.debug("");
-
-        GetPower getPower = new GetPower("D0:73:D5:13:00:9B", ipAddress);
-        client.sendMessage(getPower);
+        GetColor getColor = new GetColor("D0:73:D5:13:00:9B", ipAddress);
+        client.sendMessage(getColor);
         LOGGER.debug("");
         Thread.sleep(500);
 
-        SetPower setPower = new SetPower("D0:73:D5:13:00:9B", ipAddress, false);
-        client.sendMessage(setPower);
+        SetColor setColor = new SetColor("D0:73:D5:13:00:9B", ipAddress, 60000, 65000, 30000, 0, 10);
+        client.sendMessage(setColor);
         LOGGER.debug("");
         Thread.sleep(500);
 
-        setPower = new SetPower("D0:73:D5:13:00:9B", ipAddress, true);
-        client.sendMessage(setPower);
+        setColor = new SetColor("D0:73:D5:13:00:9B", ipAddress, 40000, 65000, 30000, 0, 10);
+        client.sendMessage(setColor);
         LOGGER.debug("");
         Thread.sleep(500);
 

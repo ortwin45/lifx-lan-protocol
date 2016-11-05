@@ -1,10 +1,9 @@
-package org.ojothepojo.lifx.message.request;
+package org.ojothepojo.lifx.message.device.request;
 
 
 import org.ojothepojo.lifx.message.Message;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 public class GetPower extends Message{
 

@@ -1,21 +1,29 @@
-package org.ojothepojo.lifx.message.request;
+package org.ojothepojo.lifx.message.light.request;
 
 
 import org.ojothepojo.lifx.message.Message;
 
 import java.nio.ByteBuffer;
 
-public class GetService extends Message {
+public class GetColor extends Message{
 
-    public GetService() {
+    public GetColor() {
         setTagged(true);
-        setType(02);
         setSource("192.168.1.255");
         setTarget("00:00:00:00:00:00");
+        setType(101);
         setSize(36);
     }
 
-    public GetService(byte[] bytes) {
+    public GetColor(String targetMacAddress, String sourceIpAddress) {
+        setTagged(false);
+        setSource(sourceIpAddress);
+        setTarget(targetMacAddress);
+        setType(101);
+        setSize(36);
+    }
+
+    public GetColor(byte[] bytes) {
         super(bytes);
     }
 
@@ -31,6 +39,6 @@ public class GetService extends Message {
 
     @Override
     public String toString() {
-        return "GetService" + super.toString()+ "--payload()";
+        return "GetColor" + super.toString() + "--payload()";
     }
 }

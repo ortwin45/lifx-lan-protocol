@@ -39,6 +39,21 @@ public class MessageTest {
         assertThat(message.getTargetAsString()).isEqualTo(macAddress);
     }
 
+    @Test
+    public void testTagged() {
+        Message message = new TestMessage();
+        message.setTagged(true);
+        short tagged = message.getTagged();
+        assertThat((tagged >> 13) & 1).isEqualTo(1);
+
+        message.setTagged((short) 0x3400);
+        assertThat(message.getTaggedAsBoolean()).isTrue();
+        message.setTagged((short) 0x1400);
+        assertThat(message.getTaggedAsBoolean()).isFalse();
+        message.setTagged((short) 0x5400);
+        assertThat(message.getTaggedAsBoolean()).isFalse();
+    }
+
     private class TestMessage extends Message {
 
         @Override

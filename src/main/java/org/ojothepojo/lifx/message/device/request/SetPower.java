@@ -1,4 +1,4 @@
-package org.ojothepojo.lifx.message.request;
+package org.ojothepojo.lifx.message.device.request;
 
 
 import org.ojothepojo.lifx.message.Message;

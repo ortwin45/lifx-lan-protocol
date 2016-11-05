@@ -1,4 +1,4 @@
-package org.ojothepojo.lifx.message.response;
+package org.ojothepojo.lifx.message.device.response;
 
 import lombok.Getter;
 import org.ojothepojo.lifx.message.Message;
@@ -23,11 +23,7 @@ public class StatePower extends Message {
         buf.rewind();
         buf = buf.order(ByteOrder.LITTLE_ENDIAN);
         short power = buf.getShort();
-        if (power == 0) {
-            level = false;
-        } else {
-            level = true;
-        }
+        level = power != 0;
     }
 
     @Override

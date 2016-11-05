@@ -46,6 +46,14 @@ public abstract class Message {
         tagged = value;
     }
 
+    public void setTagged(short value) {
+        tagged = ((value >> 13) & 1) == 1 ? true : false;
+    }
+
+    public boolean getTaggedAsBoolean() {
+        return tagged;
+    }
+
     public short getTagged() {
         if (tagged) {
             return (short) 0x3400;
@@ -172,7 +180,9 @@ public abstract class Message {
         buffer.rewind();
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         this.setSize(buffer.getShort() & 0xffff);
-        buffer.position(4);
+        this.setTagged((short)(buffer.getShort() & 0xffff));
+
+        //buffer.position(4);
         this.setSource(buffer.getInt() & 0xffffffff);
 
         short[] target = new short[6];
@@ -191,7 +201,7 @@ public abstract class Message {
 
     @Override
     public String toString() {
-        return "--header(size=" + getSize() + ", source="+ getSourceAsString() + ", target="+ getTargetAsString() + ", type="+ getType() +")";
+        return "--header(size=" + getSize() + ", tagged="+ getTaggedAsBoolean() + ", source="+ getSourceAsString() + ", target="+ getTargetAsString() + ", type="+ getType() +")";
     }
 
     // PRIVATE METHODS
@@ -202,13 +212,13 @@ public abstract class Message {
         }
     }
 
-    private void checkUnsigned16bit(int value) {
+    protected void checkUnsigned16bit(int value) {
         if (value < 0 || value > 65535) {
             throw new IllegalArgumentException("Value must be an unsigned 16-bit integer");
         }
     }
 
-    private void checkUnsigned32bit(long value) {
+    protected void checkUnsigned32bit(long value) {
         if (value < 0 || value > 4294967295L) {
             throw new IllegalArgumentException("Value must be an unsigned 32-bit integer");
         }

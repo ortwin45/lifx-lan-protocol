@@ -27,7 +27,7 @@ public class PacketListenerThread implements Runnable {
     public void run() {
         try {
             while (true) {
-                byte[] buf = new byte[128];
+                byte[] buf = new byte[100];
                 DatagramPacket receivePacket = new DatagramPacket(buf, buf.length);
                 socket.receive(receivePacket);
                 LOGGER.debug(receivePacket.getAddress() +  " " + DatatypeConverter.printHexBinary(buf));

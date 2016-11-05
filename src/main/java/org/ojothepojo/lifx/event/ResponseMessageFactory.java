@@ -1,11 +1,13 @@
 package org.ojothepojo.lifx.event;
 
 import org.ojothepojo.lifx.message.Message;
-import org.ojothepojo.lifx.message.request.GetPower;
-import org.ojothepojo.lifx.message.request.GetService;
-import org.ojothepojo.lifx.message.request.SetPower;
-import org.ojothepojo.lifx.message.response.StatePower;
-import org.ojothepojo.lifx.message.response.StateService;
+import org.ojothepojo.lifx.message.device.request.GetPower;
+import org.ojothepojo.lifx.message.device.request.GetService;
+import org.ojothepojo.lifx.message.device.request.SetPower;
+import org.ojothepojo.lifx.message.device.response.StatePower;
+import org.ojothepojo.lifx.message.device.response.StateService;
+import org.ojothepojo.lifx.message.light.request.GetColor;
+import org.ojothepojo.lifx.message.light.response.StateColor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +41,12 @@ public class ResponseMessageFactory {
                 break;
             case 22:
                 message = new StatePower(bytes);
+                break;
+            case 101:
+                message = new GetColor(bytes);
+                break;
+            case 107:
+                message = new StateColor(bytes);
                 break;
 
             default:

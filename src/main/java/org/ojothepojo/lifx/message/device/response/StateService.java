@@ -1,4 +1,4 @@
-package org.ojothepojo.lifx.message.response;
+package org.ojothepojo.lifx.message.device.response;
 
 import lombok.Getter;
 import org.ojothepojo.lifx.message.Message;
