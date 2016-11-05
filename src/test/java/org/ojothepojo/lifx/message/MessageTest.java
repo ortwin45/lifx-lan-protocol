@@ -2,6 +2,8 @@ package org.ojothepojo.lifx.message;
 
 import org.junit.Test;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 import static org.assertj.core.api.Assertions.*;
@@ -13,6 +15,12 @@ public class MessageTest {
     public void doodle() {
         short b = Short.parseShort("FF", 16);
         assertThat(b).isEqualTo((short)255);
+    }
+
+    @Test
+    public void doodle2() throws UnknownHostException {
+        InetAddress localHost = InetAddress.getLocalHost();
+        String hostAddress = localHost.getHostAddress();
     }
 
     @Test

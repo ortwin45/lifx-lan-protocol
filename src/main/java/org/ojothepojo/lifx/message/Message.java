@@ -12,7 +12,7 @@ public abstract class Message {
     // FRAME
     private int size;
     private boolean tagged;
-    private long source; // This is the multicast group
+    private long source; // This is the multicast group or the ip of the client.
 
     // FRAME ADDRESS
     private short[] target; // This is a MAC address
@@ -55,6 +55,7 @@ public abstract class Message {
     }
 
     public void setSource(String ipAddress){
+        checkIpAddress(ipAddress);
         source = ipToLong(ipAddress);
     }
 
@@ -71,6 +72,7 @@ public abstract class Message {
     }
 
     public void setTarget(String macAddress) {
+        checkMacAddress(macAddress);
         target = new short[6];
         String[] split = macAddress.split(":");
         for (int i = 0; i < split.length; i++) {
@@ -209,6 +211,18 @@ public abstract class Message {
     private void checkUnsigned32bit(long value) {
         if (value < 0 || value > 4294967295L) {
             throw new IllegalArgumentException("Value must be an unsigned 32-bit integer");
+        }
+    }
+
+    private void checkMacAddress(String macAddress) {
+        if (!macAddress.matches("^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$")) {
+            throw new IllegalArgumentException("Mac Address must be in the form 00:00:00:00:00:00");
+        }
+    }
+
+    private void checkIpAddress(String ipAddress) {
+        if (!ipAddress.matches("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+            throw new IllegalArgumentException("Mac Address must be in the form 255.255.255.255");
         }
     }
 

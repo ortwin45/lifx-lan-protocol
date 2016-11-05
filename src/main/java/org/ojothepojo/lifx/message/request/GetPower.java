@@ -4,18 +4,27 @@ package org.ojothepojo.lifx.message.request;
 import org.ojothepojo.lifx.message.Message;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
-public class GetService extends Message {
+public class GetPower extends Message{
 
-    public GetService() {
+    public GetPower() {
         setTagged(true);
-        setType(02);
         setSource("192.168.1.255");
         setTarget("00:00:00:00:00:00");
+        setType(20);
         setSize(36);
     }
 
-    public GetService(byte[] bytes) {
+    public GetPower(String targetMacAddress, String sourceIpAddress) {
+        setTagged(false);
+        setSource(sourceIpAddress);
+        setTarget(targetMacAddress);
+        setType(20);
+        setSize(36);
+    }
+
+    public GetPower(byte[] bytes) {
         super(bytes);
     }
 
@@ -31,6 +40,6 @@ public class GetService extends Message {
 
     @Override
     public String toString() {
-        return "GetService" + super.toString()+ "--payload()";
+        return "GetPower" + super.toString() + "--payload()";
     }
 }

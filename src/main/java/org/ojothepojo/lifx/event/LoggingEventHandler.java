@@ -11,7 +11,6 @@ public class LoggingEventHandler {
     @Subscribe
     public void handleEvent(MessageReceivedEvent event) {
         if (event.getMessage() != null) {
-
             LOGGER.info(event.getMessage().toString());
         }
     }

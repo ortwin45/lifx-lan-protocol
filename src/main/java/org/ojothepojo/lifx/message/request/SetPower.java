@@ -10,11 +10,22 @@ public class SetPower extends Message{
 
     private boolean level;
 
-    public SetPower() {
+    public SetPower(boolean level) {
         setTagged(true);
-        setType(21);
         setSource("192.168.1.255");
-        setTarget("0:0:0:0:0:0");
+        setTarget("00:00:00:00:00:00");
+        setLevel(false);
+        setType(21);
+        setSize(38);
+    }
+
+    public SetPower(String targetMacAddress, String sourceIpAddress, boolean level ) {
+        setTagged(false);
+        setSource(sourceIpAddress);
+        setTarget(targetMacAddress);
+        setLevel(level);
+        setType(21);
+        setSize(38);
     }
 
     public SetPower(byte[] bytes) {
