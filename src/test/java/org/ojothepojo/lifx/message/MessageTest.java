@@ -32,7 +32,7 @@ public class MessageTest {
 
     @Test
     public void testIp() {
-        Message message = new TestMessage((short)0);
+        Message message = new TestMessage((short)0, (short)0);
         String ip = "192.168.1.255";
         message.setSource(ip);
         assertThat(message.getSourceAsString()).isEqualTo(ip);
@@ -40,7 +40,7 @@ public class MessageTest {
 
     @Test
     public void testTarget() {
-        Message message = new TestMessage((short)0);
+        Message message = new TestMessage((short)0, (short)0);
         String macAddress = "D0:FF:D5:13:00:9B";
         message.setTarget(macAddress);
         assertThat(message.getTargetAsString()).isEqualTo(macAddress);
@@ -48,7 +48,7 @@ public class MessageTest {
 
     @Test
     public void testTagged() {
-        Message message = new TestMessage((short)0);
+        Message message = new TestMessage((short)0,(short)0);
         message.setTagged(true);
         short tagged = message.getTagged();
         assertThat((tagged >> 13) & 1).isEqualTo(1);
@@ -63,8 +63,8 @@ public class MessageTest {
 
     private class TestMessage extends Message {
 
-        public TestMessage(short size) {
-            super(size);
+        public TestMessage(short size, short type) {
+            super(size, type);
         }
 
         @Override

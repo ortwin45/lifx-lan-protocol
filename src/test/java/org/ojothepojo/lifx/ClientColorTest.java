@@ -23,12 +23,12 @@ public class ClientColorTest {
         LOGGER.debug("");
         Thread.sleep(500);
 
-        SetColor setColor = new SetColor("D0:73:D5:13:00:9B", ipAddress, 60000, 65000, 30000, 0, 1000);
+        SetColor setColor = new SetColor("D0:73:D5:13:00:9B", ipAddress, 60000, 65000, 30000, 0, 200);
         client.sendMessage(setColor);
         LOGGER.debug("");
         Thread.sleep(500);
 
-        setColor = new SetColor("D0:73:D5:13:00:9B", ipAddress, 40000, 5000, 60000, 0, 1000);
+        setColor = new SetColor("D0:73:D5:13:00:9B", ipAddress, 20000, 65000, 60000, 0, 200);
         client.sendMessage(setColor);
         LOGGER.debug("");
         Thread.sleep(500);

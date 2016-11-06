@@ -21,10 +21,11 @@ public abstract class Message {
     private short sequence;
 
     // PROTOCOL HEADER
-    private int type;
+    private short type;
 
-    public Message(short size) {
+    public Message(short size, short type) {
         this.size = size;
+        this.type = type;
     }
 
     public Message(byte[] bytes) {
@@ -121,16 +122,6 @@ public abstract class Message {
         return (byte) (sequence & 0xFF);
     }
 
-    protected void setType(int value) {
-        checkUnsigned16bit(value);
-        type = value;
-    }
-
-    public short getType() {
-        return (short) (type & 0xFFFF);
-    }
-
-
     // Serializing
 
     public ByteBuffer toBytes() {
@@ -155,7 +146,7 @@ public abstract class Message {
                 .put(getAckResRequired())
                 .put(getSequence())
                 .putLong(0L) // 8 bytes reserved
-                .putShort(getType())
+                .putShort(type)
                 .putShort((short)0);
     }
 
@@ -184,7 +175,7 @@ public abstract class Message {
         this.setTarget(target);
 
         buffer.position(32);
-        this.setType(buffer.getShort() & 0xffff);
+        type = buffer.getShort();
     }
 
     public abstract void parsePayload(ByteBuffer bytes);
@@ -193,7 +184,7 @@ public abstract class Message {
 
     @Override
     public String toString() {
-        return "--header(size=" + size + ", tagged="+ getTaggedAsBoolean() + ", source="+ getSourceAsString() + ", target="+ getTargetAsString() + ", type="+ getType() +")";
+        return "--header(size=" + size + ", tagged="+ getTaggedAsBoolean() + ", source="+ getSourceAsString() + ", target="+ getTargetAsString() + ", type="+ type +")";
     }
 
     // PRIVATE METHODS

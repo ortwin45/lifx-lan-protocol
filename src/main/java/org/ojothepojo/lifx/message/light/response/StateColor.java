@@ -13,15 +13,15 @@ public class StateColor extends Message {
     private static final Logger LOGGER = LoggerFactory.getLogger(StateColor.class);
 
     @Getter
-    private int hue;
+    private short hue;
     @Getter
-    private int saturation;
+    private short saturation;
     @Getter
-    private int brightness;
+    private short brightness;
     @Getter
-    private int kelvin;
+    private short kelvin;
     @Getter
-    private boolean power;
+    private short power;
     @Getter
     private String label;
 
@@ -33,13 +33,12 @@ public class StateColor extends Message {
     public void parsePayload(ByteBuffer buf) {
         buf.rewind();
         buf = buf.order(ByteOrder.LITTLE_ENDIAN);
-        hue = buf.getShort() & 0xffff;
-        saturation = buf.getShort() & 0xffff;
-        brightness = buf.getShort() & 0xffff;
-        kelvin = buf.getShort() & 0xffff;
+        hue = buf.getShort();
+        saturation = buf.getShort();
+        brightness = buf.getShort();
+        kelvin = buf.getShort();
         buf.getShort(); // reserved
-        short p = buf.getShort();
-        power = p != 0;
+        power = buf.getShort();
 
         byte[] l = new byte[32];
         buf.get(l);
