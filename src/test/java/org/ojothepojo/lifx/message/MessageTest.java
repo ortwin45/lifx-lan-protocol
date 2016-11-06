@@ -15,6 +15,13 @@ public class MessageTest {
     public void doodle() {
         short b = Short.parseShort("FF", 16);
         assertThat(b).isEqualTo((short)255);
+
+        byte s1 = (byte)0xFF;
+        assertThat(s1).isEqualTo(((byte) -1));
+
+        byte b1 = (byte)255;
+        assertThat(b1).isEqualTo((byte)-1);
+        assertThat(b1 & 0xFF).isEqualTo(255);
     }
 
     @Test
@@ -25,7 +32,7 @@ public class MessageTest {
 
     @Test
     public void testIp() {
-        Message message = new TestMessage();
+        Message message = new TestMessage((short)0);
         String ip = "192.168.1.255";
         message.setSource(ip);
         assertThat(message.getSourceAsString()).isEqualTo(ip);
@@ -33,7 +40,7 @@ public class MessageTest {
 
     @Test
     public void testTarget() {
-        Message message = new TestMessage();
+        Message message = new TestMessage((short)0);
         String macAddress = "D0:FF:D5:13:00:9B";
         message.setTarget(macAddress);
         assertThat(message.getTargetAsString()).isEqualTo(macAddress);
@@ -41,7 +48,7 @@ public class MessageTest {
 
     @Test
     public void testTagged() {
-        Message message = new TestMessage();
+        Message message = new TestMessage((short)0);
         message.setTagged(true);
         short tagged = message.getTagged();
         assertThat((tagged >> 13) & 1).isEqualTo(1);
@@ -55,6 +62,10 @@ public class MessageTest {
     }
 
     private class TestMessage extends Message {
+
+        public TestMessage(short size) {
+            super(size);
+        }
 
         @Override
         protected ByteBuffer payloadToBytes() {

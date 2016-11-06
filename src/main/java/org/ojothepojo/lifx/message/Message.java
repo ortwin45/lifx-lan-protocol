@@ -10,7 +10,7 @@ public abstract class Message {
     protected static final int HEADER_LENGTH = 8 + 16 + 12; // 36 bytes header
 
     // FRAME
-    private int size;
+    private short size;
     private boolean tagged;
     private long source; // This is the multicast group or the ip of the client.
 
@@ -23,7 +23,8 @@ public abstract class Message {
     // PROTOCOL HEADER
     private int type;
 
-    public Message() {
+    public Message(short size) {
+        this.size = size;
     }
 
     public Message(byte[] bytes) {
@@ -32,15 +33,6 @@ public abstract class Message {
     }
 
     // GETTERS AND SETTERS
-
-    public void setSize(int value){
-        checkUnsigned16bit(value);
-        size = value;
-    }
-
-    public short getSize() {
-        return (short) (size & 0xFFFF);
-    }
 
     public void setTagged(boolean value) {
         tagged = value;
@@ -155,7 +147,7 @@ public abstract class Message {
         return ByteBuffer
                 .allocate(HEADER_LENGTH)
                 .order(ByteOrder.LITTLE_ENDIAN)
-                .putShort(getSize())
+                .putShort(size)
                 .putShort(getTagged())
                 .putInt(getSource())
                 .put(getTarget()).put((byte)0).put((byte)0)
@@ -179,7 +171,7 @@ public abstract class Message {
     protected void parseHeader(ByteBuffer buffer) {
         buffer.rewind();
         buffer.order(ByteOrder.LITTLE_ENDIAN);
-        this.setSize(buffer.getShort() & 0xffff);
+        size = buffer.getShort();
         this.setTagged((short)(buffer.getShort() & 0xffff));
 
         //buffer.position(4);
@@ -201,7 +193,7 @@ public abstract class Message {
 
     @Override
     public String toString() {
-        return "--header(size=" + getSize() + ", tagged="+ getTaggedAsBoolean() + ", source="+ getSourceAsString() + ", target="+ getTargetAsString() + ", type="+ getType() +")";
+        return "--header(size=" + size + ", tagged="+ getTaggedAsBoolean() + ", source="+ getSourceAsString() + ", target="+ getTargetAsString() + ", type="+ getType() +")";
     }
 
     // PRIVATE METHODS

@@ -8,19 +8,19 @@ import java.nio.ByteBuffer;
 public class GetPower extends Message{
 
     public GetPower() {
+        super((short)36);
         setTagged(true);
         setSource("192.168.1.255");
         setTarget("00:00:00:00:00:00");
         setType(20);
-        setSize(36);
     }
 
     public GetPower(String targetMacAddress, String sourceIpAddress) {
+        super((short) 36);
         setTagged(false);
         setSource(sourceIpAddress);
         setTarget(targetMacAddress);
         setType(20);
-        setSize(36);
     }
 
     public GetPower(byte[] bytes) {

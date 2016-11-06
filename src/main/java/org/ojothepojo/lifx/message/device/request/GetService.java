@@ -8,11 +8,11 @@ import java.nio.ByteBuffer;
 public class GetService extends Message {
 
     public GetService() {
+        super((short) 36);
         setTagged(true);
         setType(02);
         setSource("192.168.1.255");
         setTarget("00:00:00:00:00:00");
-        setSize(36);
     }
 
     public GetService(byte[] bytes) {

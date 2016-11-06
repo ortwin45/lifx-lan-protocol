@@ -7,6 +7,7 @@ import org.ojothepojo.lifx.message.device.request.SetPower;
 import org.ojothepojo.lifx.message.device.response.StatePower;
 import org.ojothepojo.lifx.message.device.response.StateService;
 import org.ojothepojo.lifx.message.light.request.GetColor;
+import org.ojothepojo.lifx.message.light.request.SetColor;
 import org.ojothepojo.lifx.message.light.response.StateColor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,9 @@ public class ResponseMessageFactory {
                 break;
             case 101:
                 message = new GetColor(bytes);
+                break;
+            case 102:
+                message = new SetColor(bytes);
                 break;
             case 107:
                 message = new StateColor(bytes);
