@@ -31,11 +31,20 @@ public class MessageTest {
     }
 
     @Test
-    public void testIp() {
+    public void testIp() throws UnknownHostException {
         Message message = new TestMessage((short)0, (short)0);
         String ip = "192.168.1.255";
         message.setSource(ip);
         assertThat(message.getSourceAsString()).isEqualTo(ip);
+
+        byte[] address = new byte[4];
+        address[0] = (byte)192;
+        address[1] = (byte)168;
+        address[2] = (byte)1;
+        address[3] = (byte)255;
+        InetAddress byAddress = InetAddress.getByAddress(address);
+        assertThat(byAddress.getHostAddress()).isEqualTo("192.168.1.255");
+
     }
 
     @Test

@@ -7,7 +7,7 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 
 public abstract class Message {
-    protected static final int HEADER_LENGTH = 8 + 16 + 12; // 36 bytes header
+    private static final int HEADER_LENGTH = 8 + 16 + 12; // 36 bytes header
 
     // FRAME
     private short size;

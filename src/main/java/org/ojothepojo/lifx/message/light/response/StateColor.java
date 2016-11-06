@@ -33,6 +33,7 @@ public class StateColor extends Message {
     public void parsePayload(ByteBuffer buf) {
         buf.rewind();
         buf = buf.order(ByteOrder.LITTLE_ENDIAN);
+
         hue = buf.getShort();
         saturation = buf.getShort();
         brightness = buf.getShort();
@@ -43,10 +44,8 @@ public class StateColor extends Message {
         byte[] l = new byte[32];
         buf.get(l);
         int size = 0;
-        while (size < l.length)
-        {
-            if (l[size] == 0)
-            {
+        while (size < l.length) {
+            if (l[size] == 0) {
                 break;
             }
             size++;
@@ -65,6 +64,6 @@ public class StateColor extends Message {
 
     @Override
     public String toString() {
-        return "StateColor" + super.toString() + "--payload(hue=" + hue + ", saturation=" + saturation+ ", brightness=" + brightness+ ", kelvin=" + kelvin+ ", power=" + power+ ", label="+ label + ")";
+        return "StateColor" + super.toString() + "--payload(hue=" + (hue & 0xffff) + ", saturation=" + (saturation & 0xffff) + ", brightness=" + (brightness & 0xffff) + ", kelvin=" + (kelvin & 0xffff) + ", power=" + (power & 0xffff) + ", label=" + label + ")";
     }
 }
