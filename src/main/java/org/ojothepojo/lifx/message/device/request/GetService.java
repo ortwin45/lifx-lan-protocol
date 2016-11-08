@@ -8,9 +8,8 @@ import java.nio.ByteBuffer;
 public class GetService extends Message {
 
     public GetService() {
-        super((short) 36, (short)2);
+        super((short) 36, (short)2, "192.168.1.255");
         setTagged(true);
-        setSource("192.168.1.255");
         setTarget("00:00:00:00:00:00");
     }
 

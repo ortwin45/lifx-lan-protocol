@@ -12,7 +12,7 @@ public abstract class Message {
     // FRAME
     private short size;
     private boolean tagged;
-    private long source; // This is the multicast group or the ip of the client.
+    private byte[] source; // This is the multicast group or the ip of the client.
 
     // FRAME ADDRESS
     private short[] target; // This is a MAC address
@@ -23,9 +23,10 @@ public abstract class Message {
     // PROTOCOL HEADER
     private short type;
 
-    public Message(short size, short type) {
+    public Message(short size, short type, String sourceIp) {
         this.size = size;
         this.type = type;
+        this.source = ipStringToByteArray(sourceIp);
     }
 
     public Message(byte[] bytes) {
@@ -55,21 +56,26 @@ public abstract class Message {
         }
     }
 
-    public void setSource(String ipAddress){
-        checkIpAddress(ipAddress);
-        source = ipToLong(ipAddress);
+    public String getSource() {
+        return byteArrayToIpString(source);
     }
 
-    protected void setSource(int ipAsInt) {
-        source = ipAsInt;
+    private byte[] ipStringToByteArray(String ip) {
+        checkIpAddress(ip);
+        String[] ipAddressInArray = ip.split("\\.");
+        byte[] result = new byte[4];
+        for (int i = 0; i < ipAddressInArray.length; i++) {
+            result[i] = (byte) (Short.parseShort(ipAddressInArray[i]) & 0xff);
+        }
+        return result;
     }
 
-    public int getSource() {
-        return (int) (source & 0xFFFFFFFF);
-    }
-
-    public String getSourceAsString() {
-        return longToIp(source);
+    private String byteArrayToIpString(byte[] ip) {
+        String result = "";
+        for (byte b : ip) {
+            result = result + (short)(b & 0xff) + ".";
+        }
+        return result.substring(0, result.length() - 1);
     }
 
     public void setTarget(String macAddress) {
@@ -93,8 +99,8 @@ public abstract class Message {
         return result;
     }
 
-    public String getTargetAsString(){
-        String macAddress= "";
+    public String getTargetAsString() {
+        String macAddress = "";
         for (short s : target) {
             macAddress = macAddress + Strings.padStart(Integer.toHexString(s & 0xff).toUpperCase(), 2, '0') + ":";
         }
@@ -110,7 +116,7 @@ public abstract class Message {
         if (resRequired) {
             result = result + 1;
         }
-        return (byte)result;
+        return (byte) result;
     }
 
     public void setSequence(short value) {
@@ -140,19 +146,18 @@ public abstract class Message {
                 .order(ByteOrder.LITTLE_ENDIAN)
                 .putShort(size)
                 .putShort(getTagged())
-                .putInt(getSource())
-                .put(getTarget()).put((byte)0).put((byte)0)
-                .putInt(0).putShort((short)0) // 6 bytes reserved
+                .put(source[3]).put(source[2]).put(source[1]).put(source[0]) // little endian order
+                .put(getTarget()).put((byte) 0).put((byte) 0)
+                .putInt(0).putShort((short) 0) // 6 bytes reserved
                 .put(getAckResRequired())
                 .put(getSequence())
                 .putLong(0L) // 8 bytes reserved
                 .putShort(type)
-                .putShort((short)0);
+                .putShort((short) 0);
     }
 
 
     protected abstract ByteBuffer payloadToBytes();
-
 
 
     // Deserializing
@@ -163,13 +168,15 @@ public abstract class Message {
         buffer.rewind();
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         size = buffer.getShort();
-        this.setTagged((short)(buffer.getShort() & 0xffff));
+        this.setTagged((short) (buffer.getShort() & 0xffff));
 
-        //buffer.position(4);
-        this.setSource(buffer.getInt() & 0xffffffff);
-
+        this.source = new byte[4];
+        this.source[3] = buffer.get(); // The invers order because little endian
+        this.source[2] = buffer.get();
+        this.source[1] = buffer.get();
+        this.source[0] = buffer.get();
         short[] target = new short[6];
-        for (int i = 0; i < target.length; i++ ) {
+        for (int i = 0; i < target.length; i++) {
             target[i] = buffer.get();
         }
         this.setTarget(target);
@@ -181,10 +188,9 @@ public abstract class Message {
     public abstract void parsePayload(ByteBuffer bytes);
 
 
-
     @Override
     public String toString() {
-        return "--header(size=" + size + ", tagged="+ getTaggedAsBoolean() + ", source="+ getSourceAsString() + ", target="+ getTargetAsString() + ", type="+ type +")";
+        return "--header(size=" + size + ", tagged=" + getTaggedAsBoolean() + ", source=" + byteArrayToIpString(source) + ", target=" + getTargetAsString() + ", type=" + type + ")";
     }
 
     // PRIVATE METHODS
@@ -219,7 +225,7 @@ public abstract class Message {
         }
     }
 
-    private long ipToLong(String ipAddress) {
+    long ipToLong(String ipAddress) {
         long result = 0;
         String[] ipAddressInArray = ipAddress.split("\\.");
         for (int i = 3; i >= 0; i--) {

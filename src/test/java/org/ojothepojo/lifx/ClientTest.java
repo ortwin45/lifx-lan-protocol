@@ -22,7 +22,7 @@ public class ClientTest {
         GetService getService = new GetService();
         client.sendMessage(getService);
         LOGGER.debug("");
-        Thread.sleep(500);
+        Thread.sleep(1500);
         LOGGER.debug("");
 
         GetPower getPower = new GetPower("D0:73:D5:13:00:9B", ipAddress);
