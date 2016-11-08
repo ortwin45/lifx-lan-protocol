@@ -1,6 +1,7 @@
 package org.ojothepojo.lifx.message;
 
 import com.google.common.base.Strings;
+import org.ojothepojo.lifx.util.Util;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -61,7 +62,7 @@ public abstract class Message {
     }
 
     private byte[] ipStringToByteArray(String ip) {
-        checkIpAddress(ip);
+        Util.checkIpAddress(ip);
         String[] ipAddressInArray = ip.split("\\.");
         byte[] result = new byte[4];
         for (int i = 0; i < ipAddressInArray.length; i++) {
@@ -79,7 +80,7 @@ public abstract class Message {
     }
 
     public void setTarget(String macAddress) {
-        checkMacAddress(macAddress);
+        Util.checkMacAddress(macAddress);
         target = new short[6];
         String[] split = macAddress.split(":");
         for (int i = 0; i < split.length; i++) {
@@ -120,7 +121,7 @@ public abstract class Message {
     }
 
     public void setSequence(short value) {
-        checkUnsigned8bit(value);
+        Util.checkUnsigned8bit(value);
         sequence = value;
     }
 
@@ -193,57 +194,4 @@ public abstract class Message {
         return "--header(size=" + size + ", tagged=" + getTaggedAsBoolean() + ", source=" + byteArrayToIpString(source) + ", target=" + getTargetAsString() + ", type=" + type + ")";
     }
 
-    // PRIVATE METHODS
-
-    private void checkUnsigned8bit(int value) {
-        if (value < 0 || value > 255) {
-            throw new IllegalArgumentException("Value must be an unsigned 8-bit integer");
-        }
-    }
-
-    protected void checkUnsigned16bit(int value) {
-        if (value < 0 || value > 65535) {
-            throw new IllegalArgumentException("Value must be an unsigned 16-bit integer");
-        }
-    }
-
-    protected void checkUnsigned32bit(long value) {
-        if (value < 0 || value > 4294967295L) {
-            throw new IllegalArgumentException("Value must be an unsigned 32-bit integer");
-        }
-    }
-
-    private void checkMacAddress(String macAddress) {
-        if (!macAddress.matches("^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$")) {
-            throw new IllegalArgumentException("Mac Address must be in the form 00:00:00:00:00:00");
-        }
-    }
-
-    private void checkIpAddress(String ipAddress) {
-        if (!ipAddress.matches("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
-            throw new IllegalArgumentException("Mac Address must be in the form 255.255.255.255");
-        }
-    }
-
-    long ipToLong(String ipAddress) {
-        long result = 0;
-        String[] ipAddressInArray = ipAddress.split("\\.");
-        for (int i = 3; i >= 0; i--) {
-            long ip = Long.parseLong(ipAddressInArray[3 - i]);
-            //left shifting 24,16,8,0 and bitwise OR
-            //1. 192 << 24
-            //1. 168 << 16
-            //1. 1   << 8
-            //1. 2   << 0
-            result |= ip << (i * 8);
-        }
-        return result;
-    }
-
-    private String longToIp(long ip) {
-        return ((ip >> 24) & 0xFF) + "."
-                + ((ip >> 16) & 0xFF) + "."
-                + ((ip >> 8) & 0xFF) + "."
-                + (ip & 0xFF);
-    }
 }
