@@ -5,6 +5,8 @@ import org.ojothepojo.lifx.message.Message;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import static org.ojothepojo.lifx.util.Util.*;
+
 public class SetColor extends Message {
 
     private short hue;
