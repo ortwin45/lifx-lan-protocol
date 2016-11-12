@@ -15,28 +15,28 @@ public class ClientTest {
 
     @Test
     public void start() throws Exception {
-        Client client = new Client();
+        LifxClient lifxClient = new LifxClient();
         String ipAddress = getIpAddress();
 
-        client.startListenerThread();
+        lifxClient.startListenerThread();
         GetService getService = new GetService();
-        client.sendMessage(getService);
+        lifxClient.sendMessage(getService);
         LOGGER.debug("");
         Thread.sleep(1500);
         LOGGER.debug("");
 
         GetPower getPower = new GetPower("D0:73:D5:13:00:9B", ipAddress);
-        client.sendMessage(getPower);
+        lifxClient.sendMessage(getPower);
         LOGGER.debug("");
         Thread.sleep(500);
 
         SetPower setPower = new SetPower("D0:73:D5:13:00:9B", ipAddress, false);
-        client.sendMessage(setPower);
+        lifxClient.sendMessage(setPower);
         LOGGER.debug("");
         Thread.sleep(500);
 
         setPower = new SetPower("D0:73:D5:13:00:9B", ipAddress, true);
-        client.sendMessage(setPower);
+        lifxClient.sendMessage(setPower);
         LOGGER.debug("");
         Thread.sleep(500);
 

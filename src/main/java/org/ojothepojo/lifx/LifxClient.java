@@ -13,15 +13,15 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-public class Client {
-    private static Logger LOGGER = LoggerFactory.getLogger(Client.class);
+public class LifxClient {
+    private static Logger LOGGER = LoggerFactory.getLogger(LifxClient.class);
     public static final int BROADCAST_PORT = 56700;
 
     private EventBus eventBus;
 
     private DatagramSocket socket;
 
-    public Client() throws SocketException {
+    public LifxClient() throws SocketException {
         this.eventBus = new EventBus();
         eventBus.register(new LoggingEventHandler());
         this.socket = new DatagramSocket(BROADCAST_PORT);
