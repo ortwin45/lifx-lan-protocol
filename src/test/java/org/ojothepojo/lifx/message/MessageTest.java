@@ -51,8 +51,6 @@ public class MessageTest {
     public void testTarget() {
         String macAddress = "D0:FF:D5:13:00:9B";
         Message message = new TestMessage((short) 0, (short) 0, "192.168.1.255", macAddress);
-
-        //message.setTarget(macAddress);
         assertThat(message.getTargetAsString()).isEqualTo(macAddress);
     }
 

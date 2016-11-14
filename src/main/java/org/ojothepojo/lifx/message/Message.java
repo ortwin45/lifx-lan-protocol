@@ -90,29 +90,6 @@ public abstract class Message {
         return result;
     }
 
-/*    public void setTarget(String macAddress) {
-        Util.checkMacAddress(macAddress);
-        target = new short[6];
-        String[] split = macAddress.split(":");
-        for (int i = 0; i < split.length; i++) {
-            target[i] = Short.parseShort(split[i], 16);
-        }
-    }*/
-
-/*
-    protected void setTarget(byte[] bytes) {
-        target = bytes;
-    }
-*/
-
-/*    public byte[] getTarget() {
-        byte[] result = new byte[6];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = (byte) (target[i] & 0xff);
-        }
-        return result;
-    }*/
-
     public String getTargetAsString() {
         String macAddress = "";
         for (short s : target) {
