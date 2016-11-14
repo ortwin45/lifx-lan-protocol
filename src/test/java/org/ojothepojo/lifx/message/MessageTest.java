@@ -60,12 +60,9 @@ public class MessageTest {
         short tagged = message.getTagged();
         assertThat((tagged >> 13) & 1).isEqualTo(1);
 
-        message.setTagged((short) 0x3400);
-        assertThat(message.getTaggedAsBoolean()).isTrue();
-        message.setTagged((short) 0x1400);
-        assertThat(message.getTaggedAsBoolean()).isFalse();
-        message.setTagged((short) 0x5400);
-        assertThat(message.getTaggedAsBoolean()).isFalse();
+        message = new TestMessage((short)0,(short)0, "192.168.1.255", "FF:FF:FF:FF:FF:FF");
+        tagged = message.getTagged();
+        assertThat((tagged >> 13) & 1).isEqualTo(0);
     }
 
     private class TestMessage extends Message {

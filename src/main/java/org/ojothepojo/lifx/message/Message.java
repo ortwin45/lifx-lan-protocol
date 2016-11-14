@@ -29,7 +29,7 @@ public abstract class Message {
         this.type = type;
         this.source = ipStringToByteArray(sourceIp);
         this.target = macAddressStringToByteArray(target);
-        this.tagged = "00:00:00:00:00:00".equalsIgnoreCase(target) ? true : false;
+        this.tagged = "00:00:00:00:00:00".equalsIgnoreCase(target);
     }
 
     public Message(byte[] bytes) {
@@ -40,11 +40,7 @@ public abstract class Message {
     // GETTERS AND SETTERS
 
     public void setTagged(short value) {
-        tagged = ((value >> 13) & 1) == 1 ? true : false;
-    }
-
-    public boolean getTaggedAsBoolean() {
-        return tagged;
+        tagged = ((value >> 13) & 1) == 1;
     }
 
     public short getTagged() {
@@ -96,7 +92,7 @@ public abstract class Message {
     }
 
 
-    public byte getAckResRequired() {
+    private byte getAckResRequired() {
         int result = 0;
         if (ackRequired) {
             result = result + 2;
@@ -152,7 +148,7 @@ public abstract class Message {
 
     //2900 0054 05D8 2EE2 D073 D513 0F6E 0000 4C49 4658 5632 0000 3CB3 C542 2D16 7E14 0300 0000    017C DD00 00
     //0000 0034 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0200 0000    0000
-    protected void parseHeader(ByteBuffer buffer) {
+    private void parseHeader(ByteBuffer buffer) {
         buffer.rewind();
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         size = buffer.getShort();
