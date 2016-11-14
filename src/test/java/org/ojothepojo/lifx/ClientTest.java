@@ -52,5 +52,4 @@ public class ClientTest {
             throw new RuntimeException(e);
         }
     }
-
 }
