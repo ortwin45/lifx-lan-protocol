@@ -39,10 +39,6 @@ public abstract class Message {
 
     // GETTERS AND SETTERS
 
-    public void setTagged(boolean value) {
-        tagged = value;
-    }
-
     public void setTagged(short value) {
         tagged = ((value >> 13) & 1) == 1 ? true : false;
     }
@@ -183,7 +179,7 @@ public abstract class Message {
 
     @Override
     public String toString() {
-        return "--header(size=" + size + ", tagged=" + getTaggedAsBoolean() + ", source=" + byteArrayToIpString(source) + ", target=" + getTargetAsString() + ", type=" + type + ")";
+        return "--header(size=" + size + ", tagged=" + tagged + ", source=" + byteArrayToIpString(source) + ", target=" + getTargetAsString() + ", type=" + type + ")";
     }
 
 }

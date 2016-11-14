@@ -57,7 +57,6 @@ public class MessageTest {
     @Test
     public void testTagged() {
         Message message = new TestMessage((short)0,(short)0, "192.168.1.255", "00:00:00:00:00:00");
-        message.setTagged(true);
         short tagged = message.getTagged();
         assertThat((tagged >> 13) & 1).isEqualTo(1);
 
