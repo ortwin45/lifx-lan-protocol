@@ -32,7 +32,7 @@ public class MessageTest {
 
     @Test
     public void testIp() throws UnknownHostException {
-        Message message = new TestMessage((short)0, (short)0, "192.168.1.255");
+        Message message = new TestMessage((short)0, (short)0, "192.168.1.255", "00:00:00:00:00:00");
 
         assertThat(message.getSource()).isEqualTo("192.168.1.255");
 
@@ -49,16 +49,16 @@ public class MessageTest {
 
     @Test
     public void testTarget() {
-        Message message = new TestMessage((short) 0, (short) 0, "192.168.1.255");
-
         String macAddress = "D0:FF:D5:13:00:9B";
-        message.setTarget(macAddress);
+        Message message = new TestMessage((short) 0, (short) 0, "192.168.1.255", macAddress);
+
+        //message.setTarget(macAddress);
         assertThat(message.getTargetAsString()).isEqualTo(macAddress);
     }
 
     @Test
     public void testTagged() {
-        Message message = new TestMessage((short)0,(short)0, "192.168.1.255");
+        Message message = new TestMessage((short)0,(short)0, "192.168.1.255", "00:00:00:00:00:00");
         message.setTagged(true);
         short tagged = message.getTagged();
         assertThat((tagged >> 13) & 1).isEqualTo(1);
@@ -73,8 +73,8 @@ public class MessageTest {
 
     private class TestMessage extends Message {
 
-        public TestMessage(short size, short type, String ip) {
-            super(size, type, ip);
+        public TestMessage(short size, short type, String ip, String macAddress) {
+            super(size, type, ip, macAddress);
         }
 
         @Override

@@ -8,15 +8,15 @@ import java.nio.ByteBuffer;
 public class GetColor extends Message {
 
     public GetColor() {
-        super((short) 36, (short) 101, "192.168.1.255");
+        super((short) 36, (short) 101, "192.168.1.255", "00:00:00:00:00:00");
         setTagged(true);
-        setTarget("00:00:00:00:00:00");
+        //setTarget("00:00:00:00:00:00");
     }
 
     public GetColor(String targetMacAddress, String sourceIpAddress) {
-        super((short) 36, (short) 101, sourceIpAddress);
+        super((short) 36, (short) 101, sourceIpAddress, targetMacAddress);
         setTagged(false);
-        setTarget(targetMacAddress);
+        //setTarget(targetMacAddress);
     }
 
     public GetColor(byte[] bytes) {

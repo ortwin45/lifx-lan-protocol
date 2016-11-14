@@ -16,7 +16,7 @@ public abstract class Message {
     private byte[] source; // This is the multicast group or the ip of the client.
 
     // FRAME ADDRESS
-    private short[] target; // This is a MAC address
+    private byte[] target; // This is a MAC address
     private boolean ackRequired;
     private boolean resRequired;
     private short sequence;
@@ -24,10 +24,11 @@ public abstract class Message {
     // PROTOCOL HEADER
     private short type;
 
-    public Message(short size, short type, String sourceIp) {
+    public Message(short size, short type, String sourceIp, String target) {
         this.size = size;
         this.type = type;
         this.source = ipStringToByteArray(sourceIp);
+        this.target = macAddressStringToByteArray(target);
     }
 
     public Message(byte[] bytes) {
@@ -74,31 +75,43 @@ public abstract class Message {
     private String byteArrayToIpString(byte[] ip) {
         String result = "";
         for (byte b : ip) {
-            result = result + (short)(b & 0xff) + ".";
+            result = result + (short) (b & 0xff) + ".";
         }
         return result.substring(0, result.length() - 1);
     }
 
-    public void setTarget(String macAddress) {
+    private byte[] macAddressStringToByteArray(String macAddress) {
+        byte[] result = new byte[6];
+        Util.checkMacAddress(macAddress);
+        String[] split = macAddress.split(":");
+        for (int i = 0; i < split.length; i++) {
+            result[i] = (byte) (Integer.parseInt(split[i],16) & 0xff);
+        }
+        return result;
+    }
+
+/*    public void setTarget(String macAddress) {
         Util.checkMacAddress(macAddress);
         target = new short[6];
         String[] split = macAddress.split(":");
         for (int i = 0; i < split.length; i++) {
             target[i] = Short.parseShort(split[i], 16);
         }
-    }
+    }*/
 
-    protected void setTarget(short[] shorts) {
-        target = shorts;
+/*
+    protected void setTarget(byte[] bytes) {
+        target = bytes;
     }
+*/
 
-    public byte[] getTarget() {
+/*    public byte[] getTarget() {
         byte[] result = new byte[6];
         for (int i = 0; i < result.length; i++) {
             result[i] = (byte) (target[i] & 0xff);
         }
         return result;
-    }
+    }*/
 
     public String getTargetAsString() {
         String macAddress = "";
@@ -148,7 +161,7 @@ public abstract class Message {
                 .putShort(size)
                 .putShort(getTagged())
                 .put(source[3]).put(source[2]).put(source[1]).put(source[0]) // little endian order
-                .put(getTarget()).put((byte) 0).put((byte) 0)
+                .put(target).put((byte) 0).put((byte) 0)
                 .putInt(0).putShort((short) 0) // 6 bytes reserved
                 .put(getAckResRequired())
                 .put(getSequence())
@@ -176,11 +189,12 @@ public abstract class Message {
         this.source[2] = buffer.get();
         this.source[1] = buffer.get();
         this.source[0] = buffer.get();
-        short[] target = new short[6];
+        byte[] target = new byte[6];
         for (int i = 0; i < target.length; i++) {
             target[i] = buffer.get();
         }
-        this.setTarget(target);
+        this.target = target;
+
 
         buffer.position(32);
         type = buffer.getShort();
