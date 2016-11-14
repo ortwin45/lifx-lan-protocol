@@ -9,7 +9,6 @@ public class GetService extends Message {
 
     public GetService() {
         super((short) 36, (short)2, "192.168.1.255", "00:00:00:00:00:00");
-        setTagged(true);
     }
 
     public GetService(byte[] bytes) {

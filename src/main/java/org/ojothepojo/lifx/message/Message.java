@@ -29,6 +29,7 @@ public abstract class Message {
         this.type = type;
         this.source = ipStringToByteArray(sourceIp);
         this.target = macAddressStringToByteArray(target);
+        this.tagged = "00:00:00:00:00:00".equalsIgnoreCase(target) ? true : false;
     }
 
     public Message(byte[] bytes) {

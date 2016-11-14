@@ -17,12 +17,10 @@ public class SetColor extends Message {
 
     public SetColor() {
         super((short) 49, (short) 102, "192.168.1.255", "00:00:00:00:00:00");
-        setTagged(true);
     }
 
     public SetColor(String targetMacAddress, String sourceIpAddress, int hue, int saturation, int brightness, int kelvin, long duration) {
         super((short) 49, (short) 102, sourceIpAddress, targetMacAddress);
-        setTagged(false);
 
         checkUnsigned16bit(hue);
         checkUnsigned16bit(saturation);
