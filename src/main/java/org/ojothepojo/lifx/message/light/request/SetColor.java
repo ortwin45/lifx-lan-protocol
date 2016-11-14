@@ -15,13 +15,21 @@ public class SetColor extends Message {
     private short kelvin;
     private int duration;
 
-    public SetColor() {
+    public SetColor(int hue, int saturation, int brightness, int kelvin, long duration) {
         super((short) 49, (short) 102, "192.168.1.255", "00:00:00:00:00:00");
+        initialize(hue, saturation, brightness, kelvin, duration);
     }
 
     public SetColor(String targetMacAddress, String sourceIpAddress, int hue, int saturation, int brightness, int kelvin, long duration) {
         super((short) 49, (short) 102, sourceIpAddress, targetMacAddress);
+        initialize(hue, saturation, brightness, kelvin, duration);
+    }
 
+    public SetColor(byte[] bytes) {
+        super(bytes);
+    }
+
+    private void initialize(int hue, int saturation, int brightness, int kelvin, long duration) {
         checkUnsigned16bit(hue);
         checkUnsigned16bit(saturation);
         checkUnsigned16bit(brightness);
@@ -32,10 +40,6 @@ public class SetColor extends Message {
         this.brightness = (short) brightness;
         this.kelvin = (short) kelvin;
         this.duration = (int) duration;
-    }
-
-    public SetColor(byte[] bytes) {
-        super(bytes);
     }
 
     @Override
@@ -65,6 +69,6 @@ public class SetColor extends Message {
 
     @Override
     public String toString() {
-        return "SetColor" + super.toString() + "--payload(hue=" + (hue & 0xFFFF) + ", saturation=" + (saturation & 0xFFFF) + ", brightness=" + (brightness & 0xFFFF) + ", kelvin=" + (kelvin & 0xFFFF) + ", duration=" + (duration & 0xFFFFFFFF) + ")";
+        return "SetColor" + super.toString() + "--payload(hue=" + (hue & 0xFFFF) + ", saturation=" + (saturation & 0xFFFF) + ", brightness=" + (brightness & 0xFFFF) + ", kelvin=" + (kelvin & 0xFFFF) + ", duration=" + duration + ")";
     }
 }
