@@ -7,6 +7,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
+/**
+ * This is the base class for all messages sent to and received from the bulbs.
+ */
 public abstract class Message {
     private static final int HEADER_LENGTH = 8 + 16 + 12; // 36 bytes header
 
