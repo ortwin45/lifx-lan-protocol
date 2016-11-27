@@ -43,9 +43,9 @@ public class LifxClient {
     public void stop() throws InterruptedException, IOException {
         if (listenerThread != null && listenerThread.isAlive()) {
             listenerThread.interrupt();
+            LOGGER.info("Sending one last packet to interrupt the PacketListenerThread");
             sendMessage(new GetPower());
         }
-        Thread.sleep(500);
     }
 
     public void sendMessage(Message message) throws IOException {
