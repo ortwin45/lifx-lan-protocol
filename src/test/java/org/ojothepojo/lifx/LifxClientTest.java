@@ -28,7 +28,7 @@ public class LifxClientTest {
     public void testWithPacketListener() throws IOException, InterruptedException {
         LifxClient client = new LifxClient();
         client.startListenerThread();
-        client.sendMessage(new GetColor("D0:73:D5:13:00:9B", Util.getIpAddress()));
+        client.sendMessage(new SetColor("D0:73:D5:13:00:9B", Util.getIpAddress(), new Random().nextInt(65535), 3000, 65535, 0, 0));
         Thread.sleep(500); // wait a bit for the bulb to respond.
         client.stop();
         Thread.sleep(200); // Give the thread some time for the socket to close
@@ -45,4 +45,14 @@ public class LifxClientTest {
         Thread.sleep(200); // Give the thread some time for the socket to close
     }
 
+    @Test
+    public void detectAllBulbs() throws InterruptedException, IOException {
+        LifxClient client = new LifxClient();
+        client.startListenerThread();
+        client.getEventBus().register(new LoggingEventHandler());
+        client.sendMessage(new GetColor());
+        Thread.sleep(500); // wait a bit for the bulb to respond.
+        client.stop();
+        Thread.sleep(200); // Give the thread some time for the socket to close
+    }
 }

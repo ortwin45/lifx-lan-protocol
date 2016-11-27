@@ -19,7 +19,7 @@ import java.net.SocketException;
  */
 public class LifxClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(LifxClient.class);
-    private static final int BROADCAST_PORT = 56700;
+    private static final int PORT = 56700;
     private Thread listenerThread;
     private final DatagramSocket socket;
 
@@ -29,7 +29,7 @@ public class LifxClient {
 
     public LifxClient() throws SocketException {
         this.eventBus = new EventBus();
-        this.socket = new DatagramSocket(BROADCAST_PORT);
+        this.socket = new DatagramSocket(PORT);
     }
 
     /**
@@ -50,14 +50,14 @@ public class LifxClient {
 
     public void sendMessage(Message message) throws IOException {
         LOGGER.debug("Sending message: " + message.toString());
+        // Here, we could limit the address to a single ip...
         InetAddress address = InetAddress.getByName("192.168.1.255");
-        // TODO: I should probably send messages to a single ip when possible.
 
         DatagramPacket sendPacket = new DatagramPacket(
                 message.toBytes().array(),
                 message.toBytes().array().length,
                 address,
-                BROADCAST_PORT);
+                PORT);
         socket.send(sendPacket);
     }
 }
