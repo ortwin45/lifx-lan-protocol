@@ -4,11 +4,9 @@ import org.junit.Test;
 import org.ojothepojo.lifx.message.device.request.GetPower;
 import org.ojothepojo.lifx.message.device.request.GetService;
 import org.ojothepojo.lifx.message.device.request.SetPower;
+import org.ojothepojo.lifx.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class ClientTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientTest.class);
@@ -16,7 +14,7 @@ public class ClientTest {
     @Test
     public void start() throws Exception {
         LifxClient lifxClient = new LifxClient();
-        String ipAddress = getIpAddress();
+        String ipAddress = Util.getIpAddress();
 
         lifxClient.startListenerThread();
         GetService getService = new GetService();
@@ -42,14 +40,5 @@ public class ClientTest {
 
         LOGGER.debug("STOPPING");
 
-    }
-
-    private String getIpAddress() {
-        try {
-            InetAddress localHost = InetAddress.getLocalHost();
-            return localHost.getHostAddress();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

@@ -3,11 +3,9 @@ package org.ojothepojo.lifx;
 import org.junit.Test;
 import org.ojothepojo.lifx.message.light.request.GetColor;
 import org.ojothepojo.lifx.message.light.request.SetColor;
+import org.ojothepojo.lifx.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class ClientColorTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientColorTest.class);
@@ -15,7 +13,7 @@ public class ClientColorTest {
     @Test
     public void start() throws Exception {
         LifxClient lifxClient = new LifxClient();
-        String ipAddress = getIpAddress();
+        String ipAddress = Util.getIpAddress();
 
         lifxClient.startListenerThread();
         GetColor getColor = new GetColor("D0:73:D5:13:00:9B", ipAddress);
@@ -36,14 +34,4 @@ public class ClientColorTest {
         LOGGER.debug("STOPPING");
 
     }
-
-    private String getIpAddress() {
-        try {
-            InetAddress localHost = InetAddress.getLocalHost();
-            return localHost.getHostAddress();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }

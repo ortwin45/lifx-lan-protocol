@@ -4,6 +4,7 @@ import com.google.common.eventbus.EventBus;
 import lombok.Getter;
 import org.ojothepojo.lifx.event.PacketListenerThread;
 import org.ojothepojo.lifx.message.Message;
+import org.ojothepojo.lifx.message.device.request.GetPower;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,11 +40,12 @@ public class LifxClient {
         listenerThread.start();
     }
 
-    public void stop() throws InterruptedException {
-        this.socket.close();
+    public void stop() throws InterruptedException, IOException {
         if (listenerThread != null && listenerThread.isAlive()) {
             listenerThread.interrupt();
+            sendMessage(new GetPower());
         }
+        Thread.sleep(500);
     }
 
     public void sendMessage(Message message) throws IOException {

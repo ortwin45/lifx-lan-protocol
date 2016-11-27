@@ -24,7 +24,7 @@ public class PacketListenerThread implements Runnable {
     @Override
     public void run() {
         try {
-            while (true) {
+            while (!Thread.interrupted()) {
                 byte[] buf = new byte[100];
                 DatagramPacket receivePacket = new DatagramPacket(buf, buf.length);
                 socket.receive(receivePacket);
@@ -33,8 +33,11 @@ public class PacketListenerThread implements Runnable {
                 eventBus.post(new MessageReceivedEvent(message));
             }
         } catch (IOException e) {
-            LOGGER.warn("This is normal when 'stop()' was called. " + e.getMessage());
+            LOGGER.error(e.getMessage());
         }
+
+        LOGGER.info("Thread was interrupted. ");
+        socket.close();
     }
 
 

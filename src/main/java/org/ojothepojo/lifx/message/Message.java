@@ -35,7 +35,7 @@ public abstract class Message {
         this.tagged = "00:00:00:00:00:00".equalsIgnoreCase(target);
     }
 
-    public Message(byte[] bytes) {
+    protected Message(byte[] bytes) {
         parseHeader(ByteBuffer.wrap(Arrays.copyOfRange(bytes, 0, 36)));
         parsePayload(ByteBuffer.wrap(Arrays.copyOfRange(bytes, 36, bytes.length)));
     }
