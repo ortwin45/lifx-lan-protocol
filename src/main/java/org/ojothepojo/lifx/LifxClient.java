@@ -1,7 +1,7 @@
 package org.ojothepojo.lifx;
 
 import com.google.common.eventbus.EventBus;
-import org.ojothepojo.lifx.event.LoggingEventHandler;
+import lombok.Getter;
 import org.ojothepojo.lifx.event.PacketListenerThread;
 import org.ojothepojo.lifx.message.Message;
 import org.slf4j.Logger;
@@ -19,14 +19,15 @@ import java.net.SocketException;
 public class LifxClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(LifxClient.class);
     private static final int BROADCAST_PORT = 56700;
+    private Thread listenerThread;
+    private final DatagramSocket socket;
 
+    @Getter
     private final EventBus eventBus;
 
-    private final DatagramSocket socket;
 
     public LifxClient() throws SocketException {
         this.eventBus = new EventBus();
-        eventBus.register(new LoggingEventHandler());
         this.socket = new DatagramSocket(BROADCAST_PORT);
     }
 
@@ -34,15 +35,21 @@ public class LifxClient {
      * Creates a thread that start listening for packets send by the bulbs.
      */
     public void startListenerThread() throws InterruptedException {
-        Thread listenerThread = new Thread(new PacketListenerThread(eventBus, socket));
+        listenerThread = new Thread(new PacketListenerThread(eventBus, socket));
         listenerThread.start();
-        Thread.sleep(100);
+    }
+
+    public void stop() throws InterruptedException {
+        this.socket.close();
+        if (listenerThread != null && listenerThread.isAlive()) {
+            listenerThread.interrupt();
+        }
     }
 
     public void sendMessage(Message message) throws IOException {
         LOGGER.debug("Sending message: " + message.toString());
         InetAddress address = InetAddress.getByName("192.168.1.255");
-        // I should probably send messages to a single ip when possible.
+        // TODO: I should probably send messages to a single ip when possible.
 
         DatagramPacket sendPacket = new DatagramPacket(
                 message.toBytes().array(),

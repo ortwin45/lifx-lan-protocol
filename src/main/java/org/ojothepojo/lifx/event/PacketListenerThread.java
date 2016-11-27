@@ -33,7 +33,9 @@ public class PacketListenerThread implements Runnable {
                 eventBus.post(new MessageReceivedEvent(message));
             }
         } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
+            LOGGER.warn("This is normal when 'stop()' was called. " + e.getMessage());
         }
     }
+
+
 }

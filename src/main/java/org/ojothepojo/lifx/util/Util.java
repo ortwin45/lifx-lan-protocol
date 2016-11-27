@@ -1,5 +1,8 @@
 package org.ojothepojo.lifx.util;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 public class Util {
     public static void checkUnsigned8bit(int value) {
         if (value < 0 || value > 255) {
@@ -28,6 +31,15 @@ public class Util {
     public static void checkIpAddress(String ipAddress) {
         if (!ipAddress.matches("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
             throw new IllegalArgumentException("Mac Address must be in the form 255.255.255.255");
+        }
+    }
+
+    public static String getIpAddress() {
+        try {
+            InetAddress localHost = InetAddress.getLocalHost();
+            return localHost.getHostAddress();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
         }
     }
 }
