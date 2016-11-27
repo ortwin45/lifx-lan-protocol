@@ -30,6 +30,9 @@ public class LifxClient {
     public LifxClient() throws SocketException {
         this.eventBus = new EventBus();
         this.socket = new DatagramSocket(PORT);
+        // You might not want to broadcast, but address specific ip's for specific messages.
+        // This exercise is left to the reader.
+        this.socket.setBroadcast(true);
     }
 
     /**
@@ -50,7 +53,8 @@ public class LifxClient {
 
     public void sendMessage(Message message) throws IOException {
         LOGGER.debug("Sending message: " + message.toString());
-        // Here, we could limit the address to a single ip...
+        // Here, we could limit the address to the single ip of the target bulb. But why does it only work with 255
+        // at the end???
         InetAddress address = InetAddress.getByName("192.168.1.255");
 
         DatagramPacket sendPacket = new DatagramPacket(

@@ -16,7 +16,7 @@ public abstract class Message {
     // FRAME
     private short size;
     private boolean tagged;
-    private byte[] source; // This is the multicast group or the ip of the client.
+    private byte[] source; // This is just an id of the client, but in our case, it's the ip.
 
     // FRAME ADDRESS
     private byte[] target; // This is a MAC address
@@ -27,10 +27,10 @@ public abstract class Message {
     // PROTOCOL HEADER
     private short type;
 
-    public Message(short size, short type, String sourceIp, String target) {
+    public Message(short size, short type, String target) {
         this.size = size;
         this.type = type;
-        this.source = ipStringToByteArray(sourceIp);
+        this.source = ipStringToByteArray(Util.getIpAddress());
         this.target = macAddressStringToByteArray(target);
         this.tagged = "00:00:00:00:00:00".equalsIgnoreCase(target);
     }

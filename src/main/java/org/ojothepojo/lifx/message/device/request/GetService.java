@@ -8,7 +8,7 @@ import java.nio.ByteBuffer;
 public class GetService extends Message {
 
     public GetService() {
-        super((short) 36, (short)2, "192.168.1.255", "00:00:00:00:00:00");
+        super((short) 36, (short) 2, "00:00:00:00:00:00");
     }
 
     public GetService(byte[] bytes) {

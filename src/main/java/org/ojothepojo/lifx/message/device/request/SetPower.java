@@ -11,12 +11,12 @@ public class SetPower extends Message{
     private short level;
 
     public SetPower(boolean level) {
-        super((short) 38, (short)21, "192.168.1.255", "00:00:00:00:00:00");
+        super((short) 38, (short) 21, "00:00:00:00:00:00");
         setLevel(false);
     }
 
-    public SetPower(String targetMacAddress, String sourceIpAddress, boolean level ) {
-        super((short) 38, (short)21, sourceIpAddress, targetMacAddress);
+    public SetPower(String targetMacAddress, boolean level) {
+        super((short) 38, (short) 21, targetMacAddress);
         setLevel(level);
     }
 
