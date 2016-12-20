@@ -2,6 +2,8 @@
 <head>
     <link rel="stylesheet" href="css/reveal.css">
     <link rel="stylesheet" href="css/theme/night.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
 </head>
 <body>
 <div class="reveal">
@@ -43,7 +45,71 @@
         </section>
 
         <section>
-            <h2>UDP</h2>
+            <h2>For example</h2>
+            <p>The LAN Protocol utilizes UDP/IP. Numeric data-type byte-order is little-endian. Each message is composed
+                of a header and a payload.</p>
+        </section>
+
+        <section>
+            <h2>Protocol description example</h2>
+            <table class="reveal">
+                <tr>
+                    <th>Field</th>
+                    <th>Bits</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>Size</td>
+                    <td>16</td>
+                    <td><code>uint16_t</code></td>
+                    <td>Size of entire message in bytes including this field</td>
+                </tr>
+                <tr>
+                    <td>Origin</td>
+                    <td>2</td>
+                    <td><code>uint8_t</code>(?)</td>
+                    <td>Message origin indicator: must be zero (0)</td>
+                </tr>
+                <tr>
+                    <td>Tagged</td>
+                    <td>1</td>
+                    <td><code>bool</code></td>
+                    <td>Determines usage of the Frame Address target field</td>
+                </tr>
+                <tr>
+                    <td>Target</td>
+                    <td>64</td>
+                    <td><code>uint64_t</code>(!)</td>
+                    <td>6 byte device address (MAC address) or zero (0) means all devices</td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>Result should be something like... </h2>
+            <code>580000541001A8C0D073D513009B00004C49465856320000487821...</code>
+        </section>
+
+        <section>
+            <h2>UDP vs TCP</h2>
+            <div class="fragment">
+                <p>"Internet is TCP"</p>
+                <p>Reliability, ordered,...</p>
+            </div>
+            <div class="fragment">
+                <p>"Online gaming and streaming is UDP"</p>
+                <p>Throws out the error checking</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>UDP in Java</h2>
+            <pre><code>
+DatagramSocket socket = new DatagrapSocket(PORT);
+DatagramPacket sendPacket = new DatagramPacket(buf[], length, address, PORT);
+socket.send(sendPacket);
+            </code></pre>
         </section>
 
         <section>
@@ -62,8 +128,16 @@
 
         <section>
             <h2>ByteBuffer</h2>
+            <p>Used for fast low-level IO.</p>
+            <p>Support for endianness.</p>
+            <pre><code>
+                ByteBuffer
+                .allocate(HEADER_LENGTH)
+                .order(ByteOrder.LITTLE_ENDIAN)
+                .putShort(size)
+                .putShort(getTagged());
+            </code></pre>
         </section>
-
 
         <section>
             <h2>Who am I?</h2>
@@ -74,9 +148,27 @@
 
     </div>
 </div>
+
+<script src="lib/js/head.min.js"></script>
 <script src="js/reveal.js"></script>
+
 <script>
-    Reveal.initialize();
+    // More info https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        history: true,
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {
+                src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+            }
+        ]
+    });
 </script>
 </body>
 </html>
