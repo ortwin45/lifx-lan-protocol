@@ -26,7 +26,7 @@
     <div class="slides">
         <section>
             <h1>Hobby project</h1>
-            <h2>Smart lamp LAN protocol</h2>
+            <h2>LIFX Lamp LAN protocol</h2>
         </section>
 
         <section>
@@ -42,52 +42,8 @@
         </section>
 
         <section>
-            <h2>Why?</h2>
-            <div class="fragment">
-                <p>Why not</p>
-                <img src="images/whynot.gif"/>
-            </div>
-            <p class="fragment">Also, I wanted to learn some low level stuff, </p>
-            <p class="fragment">and kids are a good source of inspiration too.</p>
-        </section>
-
-        <section>
-            <h2>So I started working</h2>
-            <img src="images/typing.gif"/>
-        </section>
-
-        <section>
-            <h2>Goal</h2>
-            <p>Send bits to the lamp</p>
-            <p>Listen for bits from the lamp</p>
-            <p>Optional: easy to use</p>
-        </section>
-
-        <section>
-            <h2>Design</h2>
-            <div style="text-align: left;">
-                <p>Message (like: getColor, setColor, ...)</p>
-                <ul class="fragment">
-                    <li>Defined by the protocol</li>
-                    <li>Convert to/from stream of bytes</li>
-                </ul>
-                <p class="fragment">LifxClient: send Message to the lamp</p>
-                <p class="fragment">ListenerTread</p>
-                <ul class="fragment">
-                    <li>Listen for Message from the lamp</li>
-                    <li>Fire event</li>
-                </ul>
-            </div>
-        </section>
-
-        <section>
-            <h2>But there were a few things I didn't understand</h2>
-            <img src="images/dontunderstand.gif">
-        </section>
-
-        <section>
             <h2>Protocol description</h2>
-            <p>The LAN Protocol utilizes UDP/IP. Numeric data-type byte-order is little-endian.</p>
+            <p>"The LAN Protocol utilizes UDP/IP. Numeric data-type byte-order is little-endian."</p>
         </section>
 
         <section>
@@ -126,6 +82,31 @@
             </table>
         </section>
 
+
+        <section>
+            <h2>Goal</h2>
+            <p>Send bits to the lamp</p>
+            <p>Listen for bits from the lamp</p>
+            <p>Optional: easy to use</p>
+        </section>
+
+        <section>
+            <h2>Design</h2>
+            <div style="text-align: left;">
+                <p>Message (like: getColor, setColor, ...)</p>
+                <ul class="fragment">
+                    <li>Defined by the protocol</li>
+                    <li>Convert to/from stream of bytes</li>
+                </ul>
+                <p class="fragment">LifxClient: send Message to the lamp</p>
+                <p class="fragment">ListenerTread</p>
+                <ul class="fragment">
+                    <li>Listen for Message from the lamp</li>
+                    <li>Fire event</li>
+                </ul>
+            </div>
+        </section>
+
         <section>
             <h2>Result should be something like</h2>
             <code>580000541001A8C0D073D513009B00004C00487821...</code>
@@ -136,10 +117,12 @@
             <div class="fragment">
                 <p>"Internet is TCP"</p>
                 <p>Reliability, ordered,...</p>
+                <p>This presentation</p>
             </div>
             <div class="fragment">
                 <p>"Online gaming and streaming is UDP"</p>
                 <p>Throws out the error checking</p>
+                <p>Watching this presentation on youtube</p>
             </div>
         </section>
 
@@ -162,6 +145,8 @@ socket.receive(somePacket);
         <section>
             <h2>Endianness</h2>
             <img src="images/endianness.jpg"/>
+            <p>"A civil war erupts over whether the big end or the little end of a soft-boiled egg is the proper end to
+                crack open."</p>
         </section>
 
         <section>
@@ -209,6 +194,18 @@ socket.receive(somePacket);
             <p>bpost</p>
             <p>https://github.com/ortwin45</p>
         </section>
+
+
+        <section>
+            <h2>Why?</h2>
+            <div class="fragment">
+                <p>Why not</p>
+                <img src="images/whynot.gif"/>
+            </div>
+            <p class="fragment">Also, I wanted to learn some low level stuff, </p>
+            <p class="fragment">and kids are a good source of inspiration too.</p>
+        </section>
+
 
     </div>
 </div>
