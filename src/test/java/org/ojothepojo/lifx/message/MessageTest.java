@@ -22,6 +22,16 @@ public class MessageTest {
         byte b1 = (byte) 255;
         assertThat(b1).isEqualTo((byte) -1);
         assertThat(b1 & 0xFF).isEqualTo(255);
+
+        short someUnsignedShort = 255;
+        byte bb = (byte) (someUnsignedShort & 0xFF);
+        int i = bb;
+        i = bb & 0xFF;
+        assertThat(bb).isEqualTo((byte) -1);
+
+        someUnsignedShort = 256;
+        bb = (byte) (someUnsignedShort & 0xFF);
+        assertThat(bb).isEqualTo((byte) -1);
     }
 
     @Test

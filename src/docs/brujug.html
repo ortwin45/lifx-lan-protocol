@@ -82,59 +82,11 @@
             </table>
         </section>
 
-
         <section>
             <h2>Goal</h2>
-            <p>Send bits to the lamp</p>
-            <p>Listen for bits from the lamp</p>
-            <p>Optional: easy to use</p>
-        </section>
-
-        <section>
-            <h2>Design</h2>
-            <div style="text-align: left;">
-                <p>Message (like: getColor, setColor, ...)</p>
-                <ul class="fragment">
-                    <li>Defined by the protocol</li>
-                    <li>Convert to/from stream of bytes</li>
-                </ul>
-                <p class="fragment">LifxClient: send Message to the lamp</p>
-                <p class="fragment">ListenerTread</p>
-                <ul class="fragment">
-                    <li>Listen for Message from the lamp</li>
-                    <li>Fire event</li>
-                </ul>
-            </div>
-        </section>
-
-        <section>
-            <h2>Result should be something like</h2>
-            <code>580000541001A8C0D073D513009B00004C00487821...</code>
-        </section>
-
-        <section>
-            <h2>UDP vs TCP</h2>
-            <div class="fragment">
-                <p>"Internet is TCP"</p>
-                <p>Reliability, ordered,...</p>
-                <p>This presentation</p>
-            </div>
-            <div class="fragment">
-                <p>"Online gaming and streaming is UDP"</p>
-                <p>Throws out the error checking</p>
-                <p>Watching this presentation on youtube</p>
-            </div>
-        </section>
-
-        <section>
-            <h2>UDP in Java</h2>
-            <pre><code>
-DatagramSocket socket = new DatagrapSocket(PORT);
-DatagramPacket sendPacket = new DatagramPacket(buf, buf.length, address, PORT);
-DatagramPacket receivePacket = new DatagramPacket(buf, buf.length;
-socket.send(sendPacket);
-socket.receive(somePacket);
-            </code></pre>
+            <p>Translate "set brightness 50% and color red" into</p>
+            <p>580000541001A8C0D073D513009B00004C00487821...</p>
+            <p>and send it to the lamp</p>
         </section>
 
         <section>
@@ -151,25 +103,68 @@ socket.receive(somePacket);
 
         <section>
             <h2>Signed vs Unsigned</h2>
-            <p>Lifx: 0xFF -> 255</p>
-            <p>Java: 0xFF -> -1</p>
-            <p>byte b = 255; // doesn't compile</p>
-            <p>byte b = 1; // compiles</p>
-            <p>byte b = (byte)255; // compiles</p>
+            <p>Lifx: 0xFF (1111 1111) -> 255</p>
+            <p>Java: 0xFF (1111 1111) -> -1</p>
+            <pre><code>
+byte b = 255; // doesn't compile
+byte b = 1; // compiles
+byte b = (byte)255; // compiles
+            </code></pre>
+
         </section>
+
+        <section>
+            <h2>Unsigned value in Java</h2>
+            <pre><code>
+short unsignedShort = 255;
+byte b = (byte) unsignedShort; // b = -1
+int i = b // i = -1
+
+// How to get back to the original unsigned value?
+int i = b & 0xFF; // i = 255
+
+            </code></pre>
+        </section>
+
 
         <section>
             <h2>ByteBuffer</h2>
             <p>Used for fast low-level IO.</p>
             <p>Support for endianness.</p>
             <pre><code>
-                ByteBuffer
-                .allocate(HEADER_LENGTH)
-                .order(ByteOrder.LITTLE_ENDIAN)
-                .putShort(size)
-                .putShort(getTagged());
+ByteBuffer
+	.allocate(HEADER_LENGTH)
+	.order(ByteOrder.LITTLE_ENDIAN)
+	.putShort(size)
+	.putShort(getTagged());
             </code></pre>
         </section>
+
+        <section>
+            <h2>UDP vs TCP</h2>
+            <div class="fragment">
+                <p>"Internet is TCP"</p>
+                <p>Reliability, ordered,...</p>
+                <p>A classroom presentation</p>
+            </div>
+            <div class="fragment">
+                <p>"Online gaming and streaming is UDP"</p>
+                <p>Throws out the error checking</p>
+                <p>A recorded presentation</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>UDP in Java</h2>
+            <pre><code>
+DatagramSocket socket = new DatagrapSocket(PORT);
+DatagramPacket sendPacket = new DatagramPacket(buf, buf.length, address, PORT);
+DatagramPacket receivePacket = new DatagramPacket(buf, buf.length;
+socket.send(sendPacket);
+socket.receive(somePacket);
+            </code></pre>
+        </section>
+
 
         <section>
             <h2>Demo</h2>
@@ -207,6 +202,22 @@ socket.receive(somePacket);
         </section>
 
 
+        <section>
+            <h2>Design</h2>
+            <div style="text-align: left;">
+                <p>Message (like: getColor, setColor, ...)</p>
+                <ul class="fragment">
+                    <li>Defined by the protocol</li>
+                    <li>Convert to/from stream of bytes</li>
+                </ul>
+                <p class="fragment">LifxClient: send Message to the lamp</p>
+                <p class="fragment">ListenerTread</p>
+                <ul class="fragment">
+                    <li>Listen for Message from the lamp</li>
+                    <li>Fire event</li>
+                </ul>
+            </div>
+        </section>
     </div>
 </div>
 
