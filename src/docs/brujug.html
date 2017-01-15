@@ -42,6 +42,16 @@
         </section>
 
         <section>
+            <h2>Why?</h2>
+            <div class="fragment">
+                <p>Why not</p>
+                <img src="images/whynot.gif"/>
+            </div>
+            <p class="fragment">Also, I wanted to learn some low level stuff, </p>
+            <p class="fragment">and kids are a good source of inspiration too.</p>
+        </section>
+
+        <section>
             <h2>Protocol description</h2>
             <p>"The LAN Protocol utilizes UDP/IP. Numeric data-type byte-order is little-endian."</p>
         </section>
@@ -84,10 +94,16 @@
 
         <section>
             <h2>Goal</h2>
-            <p>Translate "set brightness 50% and color red" into</p>
+            <p>Use the protocal description to translate "set brightness 50% and color red" into</p>
             <p>580000541001A8C0D073D513009B00004C00487821...</p>
             <p>and send it to the lamp</p>
         </section>
+
+        <section>
+            <h2>But there were a few things I didn't understand</h2>
+            <img src="images/dontunderstand.gif">
+        </section>
+
 
         <section>
             <h2>Endianness</h2>
@@ -116,8 +132,8 @@ byte b = (byte)255; // compiles
         <section>
             <h2>Unsigned value in Java</h2>
             <pre><code>
-short unsignedShort = 255;
-byte b = (byte) unsignedShort; // b = -1
+int unsigned = 255;
+byte b = (byte) unsigned; // b = -1
 int i = b // i = -1
 
 // How to get back to the original unsigned value?
@@ -132,11 +148,12 @@ int i = b & 0xFF; // i = 255
             <p>Used for fast low-level IO.</p>
             <p>Support for endianness.</p>
             <pre><code>
-ByteBuffer
+ByteBuffer byteBuffer = ByteBuffer
 	.allocate(HEADER_LENGTH)
 	.order(ByteOrder.LITTLE_ENDIAN)
 	.putShort(size)
 	.putShort(getTagged());
+byte[] byteArray = byteBuffer.toBytes();
             </code></pre>
         </section>
 
@@ -152,6 +169,7 @@ ByteBuffer
                 <p>Throws out the error checking</p>
                 <p>A recorded presentation</p>
             </div>
+            <p class="fragment">...subnet masking, broadcasting, ... </p>
         </section>
 
         <section>
@@ -165,6 +183,28 @@ socket.receive(somePacket);
             </code></pre>
         </section>
 
+        <section>
+            <h2>Result</h2>
+            <pre class="fragment"><code>
+LifxClient client = new LifxClient();
+client.sendMessage(new SetColor("D0:73:D5:13:00:9B", new Random().nextInt(65535), 3000, 65535, 0, 0));
+            </code></pre>
+            <pre class="fragment"><code>
+LifxClient client = new LifxClient();
+client.startListenerThread();
+client.sendMessage(new SetColor("D0:73:D5:13:00:9B", new Random().nextInt(65535), 3000, 65535, 0, 0));
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>Result</h2>
+            <pre class="fragment"><code>
+LifxClient client = new LifxClient();
+client.startListenerThread();
+client.getEventBus().register(new LoggingEventHandler());
+client.sendMessage(new GetColor("D0:73:D5:13:00:9B", Util.getIpAddress()));
+             </code></pre>
+        </section>
 
         <section>
             <h2>Demo</h2>
@@ -190,34 +230,6 @@ socket.receive(somePacket);
             <p>https://github.com/ortwin45</p>
         </section>
 
-
-        <section>
-            <h2>Why?</h2>
-            <div class="fragment">
-                <p>Why not</p>
-                <img src="images/whynot.gif"/>
-            </div>
-            <p class="fragment">Also, I wanted to learn some low level stuff, </p>
-            <p class="fragment">and kids are a good source of inspiration too.</p>
-        </section>
-
-
-        <section>
-            <h2>Design</h2>
-            <div style="text-align: left;">
-                <p>Message (like: getColor, setColor, ...)</p>
-                <ul class="fragment">
-                    <li>Defined by the protocol</li>
-                    <li>Convert to/from stream of bytes</li>
-                </ul>
-                <p class="fragment">LifxClient: send Message to the lamp</p>
-                <p class="fragment">ListenerTread</p>
-                <ul class="fragment">
-                    <li>Listen for Message from the lamp</li>
-                    <li>Fire event</li>
-                </ul>
-            </div>
-        </section>
     </div>
 </div>
 
