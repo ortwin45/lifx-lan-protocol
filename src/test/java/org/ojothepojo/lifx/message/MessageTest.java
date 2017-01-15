@@ -31,7 +31,7 @@ public class MessageTest {
 
         someUnsignedShort = 256;
         bb = (byte) (someUnsignedShort & 0xFF);
-        assertThat(bb).isEqualTo((byte) -1);
+        assertThat(bb).isEqualTo((byte) 0);
     }
 
     @Test
