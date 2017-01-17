@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>reveal.js</title>
+    <title>BruJUG</title>
 
     <link rel="stylesheet" href="css/reveal.css">
     <link rel="stylesheet" href="css/theme/black.css">
@@ -175,11 +175,11 @@ byte[] byteArray = byteBuffer.toBytes();
         <section>
             <h2>UDP in Java</h2>
             <pre><code>
-DatagramSocket socket = new DatagrapSocket(PORT);
+DatagramSocket socket = new DatagramSocket(PORT);
 DatagramPacket sendPacket = new DatagramPacket(buf, buf.length, address, PORT);
 DatagramPacket receivePacket = new DatagramPacket(buf, buf.length;
 socket.send(sendPacket);
-socket.receive(somePacket);
+socket.receive(somePacket); // blocks, so we probably need a separate thread!
             </code></pre>
         </section>
 
@@ -187,28 +187,23 @@ socket.receive(somePacket);
             <h2>Result</h2>
             <pre class="fragment"><code>
 LifxClient client = new LifxClient();
-client.sendMessage(new SetColor("D0:73:D5:13:00:9B", new Random().nextInt(65535), 3000, 65535, 0, 0));
+client.sendMessage(new SetColor("D0:73:D5:13:00:9B", 65535, 0, 65535, 0, 0));
+// mac address, hue, staturation, brightness, kelvin, duration
             </code></pre>
-            <pre class="fragment"><code>
-LifxClient client = new LifxClient();
-client.startListenerThread();
-client.sendMessage(new SetColor("D0:73:D5:13:00:9B", new Random().nextInt(65535), 3000, 65535, 0, 0));
-            </code></pre>
-        </section>
-
-        <section>
-            <h2>Result</h2>
             <pre class="fragment"><code>
 LifxClient client = new LifxClient();
 client.startListenerThread();
 client.getEventBus().register(new LoggingEventHandler());
-client.sendMessage(new GetColor("D0:73:D5:13:00:9B", Util.getIpAddress()));
-             </code></pre>
+client.sendMessage(new GetColor("D0:73:D5:13:00:9B"));
+            </code></pre>
         </section>
 
         <section>
             <h2>Demo</h2>
             <p>1 Raspberry PI, 1 box, 2 buttons, 1 lamp...</p>
+        </section>
+
+        <section data-background-video="images/lifx-button-box.mp4" data-background-color="#000000">
         </section>
 
         <section>
@@ -219,7 +214,6 @@ client.sendMessage(new GetColor("D0:73:D5:13:00:9B", Util.getIpAddress()));
                 <li class="fragment">Micro services</li>
                 <li class="fragment">Machine Learning</li>
                 <li class="fragment">...</li>
-                <li class="fragment">... Not really</li>
             </ul>
         </section>
 
